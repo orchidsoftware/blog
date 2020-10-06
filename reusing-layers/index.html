@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="Reusing layers for Laravel Orchid">
+
+        <meta property="og:title" content="Reusing layers | Laravel Orchid Blog"/>
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://blog.orchid.software/reusing-layers"/>
+        <meta property="og:description" content="Reusing layers for Laravel Orchid" />
+
+        <title>Reusing layers | Laravel Orchid Blog</title>
+
+        <link rel="home" href="https://blog.orchid.software">
+        <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
+        <link href="/blog/feed.atom" type="application/atom+xml" rel="alternate" title="Laravel Orchid Blog Atom Feed">
+
+                    <!-- Yandex.Metrika counter --> <script type="text/javascript" > (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}; m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}) (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(42925369, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, trackHash:true }); </script> <noscript><div><img src="https://mc.yandex.ru/watch/42925369" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
+        
+        <link rel="stylesheet" href="/assets/build/css/main.css?id=5442ae56ce15ef7c009d">
+</head>
+
+<body>
+
+<header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar px-0">
+  <div class="container flex-wrap flex-md-nowrap py-0 px-3">
+    <div class="d-flex justify-content-center justify-content-md-start">
+      <ul class="navbar-nav bd-navbar-nav flex-row">
+        <li class="nav-item">
+          <a class="nav-link active" href="https://blog.orchid.software">Blog</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://orchid.software/">Home</a>
+        </li>
+      </ul>
+    </div>
+
+    <ul class="navbar-nav ml-sm-auto">
+      <li class="nav-item">
+        <a class="nav-link p-2" href="https://github.com/orchidsoftware" target="_blank" rel="noopener"
+           aria-label="GitHub">
+
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="navbar-nav-svg" width="36" height="36"
+               role="img" fill="currentColor">
+            <path d="M4.956 16.331c-0.362 0-0.7-0.231-0.813-0.594-0.919-2.869-1.050-7.938 0.919-10.238-0.438-1.663-0.194-3.913 0.612-5.119 0.169-0.25 0.444-0.394 0.75-0.381 2.294 0.1 3.787 1.056 5.1 1.931 1.869-0.488 3.688-0.656 5.844-0.538 0.531 0.031 1.056 0.15 1.519 0.256 0.438 0.1 0.887 0.206 1.15 0.181 0.238-0.025 0.662-0.313 1.006-0.55 0.319-0.219 0.656-0.444 1.006-0.6 1-0.438 1.9-0.637 3.113-0.681 0.469-0.013 0.869 0.35 0.887 0.825s-0.35 0.869-0.825 0.881c-1.006 0.038-1.681 0.181-2.488 0.538-0.206 0.094-0.462 0.263-0.731 0.45-0.531 0.362-1.137 0.775-1.813 0.837-0.544 0.050-1.106-0.075-1.7-0.219-0.413-0.094-0.844-0.194-1.225-0.219-2.106-0.119-3.856 0.063-5.669 0.581-0.238 0.069-0.494 0.031-0.706-0.112l-0.213-0.144c-1.144-0.756-2.225-1.481-3.806-1.675-0.394 1.006-0.444 2.675-0.050 3.663 0.138 0.338 0.037 0.731-0.237 0.963-1.544 1.313-1.738 5.956-0.819 8.838 0.144 0.45-0.106 0.931-0.556 1.075-0.088 0.038-0.175 0.050-0.256 0.050zM11.456 24.769c-0.063 0-0.125-0.006-0.188-0.019-0.463-0.1-0.75-0.556-0.65-1.019l0.056-0.244c0.262-1.188 0.506-2.144 0.794-2.856-3.506-0.731-6.063-2.4-7.275-4.762-0.212-0.419-0.050-0.938 0.369-1.15s0.938-0.050 1.15 0.369c1.094 2.131 3.669 3.575 7.256 4.069 0.344 0.050 0.625 0.3 0.713 0.631 0.088 0.337-0.037 0.694-0.319 0.9-0.181 0.163-0.512 0.844-1.019 3.163l-0.056 0.25c-0.088 0.394-0.438 0.669-0.831 0.669zM9.881 31.025c-0.056 0-0.106-0.006-0.162-0.019-0.463-0.094-0.769-0.525-0.675-0.988 0.156-0.794 0.713-1.125 1.044-1.319 0.225-0.131 0.294-0.181 0.331-0.269 0.194-0.413 0.144-1.481 0.1-2.338-0.019-0.363-0.037-0.731-0.044-1.087-1.981 0.344-4.131 0.45-5.269-1.431-0.225-0.375-0.369-0.756-0.5-1.1-0.15-0.387-0.275-0.725-0.481-0.975-0.3-0.363-0.244-0.9 0.119-1.2s0.9-0.25 1.2 0.119c0.381 0.469 0.581 0.994 0.756 1.456 0.112 0.3 0.219 0.581 0.362 0.819 0.612 1.012 1.95 0.95 4.525 0.431 0.269-0.056 0.544 0.025 0.744 0.206 0.2 0.188 0.3 0.456 0.269 0.725-0.063 0.544-0.025 1.256 0.006 1.944 0.063 1.206 0.119 2.344-0.262 3.15-0.275 0.581-0.719 0.844-1.012 1.012-0.081 0.050-0.206 0.119-0.231 0.15-0.056 0.419-0.412 0.713-0.819 0.713zM22.306 30.862c-0.281 0-0.55-0.137-0.719-0.387-0.069-0.113-0.169-0.181-0.344-0.3-0.275-0.194-0.65-0.456-0.931-1-0.506-0.994-0.425-2.438-0.344-3.962 0.050-0.938 0.1-1.906-0-2.669-0.087-0.644-0.313-0.931-0.625-1.331-0.2-0.262-0.431-0.556-0.613-0.944-0.119-0.256-0.1-0.55 0.038-0.794 0.144-0.244 0.394-0.4 0.675-0.419 3.206-0.238 5.738-1.75 6.956-4.144 0.212-0.419 0.725-0.588 1.15-0.375 0.419 0.213 0.588 0.725 0.375 1.15-1.3 2.569-3.781 4.3-6.919 4.894 0.281 0.413 0.556 0.938 0.663 1.744 0.125 0.919 0.069 1.969 0.012 2.981-0.063 1.175-0.131 2.506 0.163 3.094 0.075 0.15 0.169 0.219 0.381 0.369 0.231 0.156 0.544 0.375 0.8 0.769s0.144 0.925-0.25 1.181c-0.144 0.1-0.306 0.144-0.469 0.144zM27.162 16.156c-0.075 0-0.156-0.012-0.231-0.031-0.456-0.131-0.719-0.6-0.587-1.056 0.944-3.319 0.3-7.631-1.35-9.037-0.269-0.231-0.369-0.6-0.25-0.931 0.4-1.144 0.131-2.862-0.325-3.9-0.188-0.431 0.006-0.938 0.438-1.125s0.938 0.006 1.125 0.438c0.525 1.188 0.869 3.056 0.525 4.613 2.038 2.25 2.438 7.050 1.481 10.412-0.113 0.375-0.45 0.619-0.825 0.619zM19.487 32.013c-0.156 0-0.319-0.044-0.462-0.137-0.156-0.1-0.625-0.4-1.494-1.75-0.394-0.613-0.681-3.662-0.856-9.075-0.012-0.469 0.356-0.869 0.825-0.881s0.869 0.356 0.881 0.825c0.113 3.544 0.375 7.563 0.613 8.25 0.637 0.988 0.938 1.188 0.95 1.194 0.394 0.256 0.512 0.781 0.256 1.181-0.156 0.256-0.431 0.394-0.712 0.394zM13.006 32.013c-0.281 0-0.556-0.137-0.719-0.394-0.256-0.394-0.137-0.925 0.256-1.181 0.012-0.006 0.313-0.206 0.95-1.194 0.238-0.681 0.494-4.706 0.613-8.25 0.012-0.469 0.412-0.844 0.881-0.825 0.469 0.012 0.844 0.413 0.825 0.881-0.175 5.413-0.463 8.469-0.856 9.075-0.869 1.344-1.338 1.65-1.494 1.75-0.137 0.094-0.3 0.137-0.456 0.137z"></path>
+          </svg>
+
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link p-2" href="https://twitter.com/orchid_platform" target="_blank" rel="noopener"
+           aria-label="Twitter">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="navbar-nav-svg" height="36" role="img"
+               fill="currentColor">
+            <path d="M21.387 4.959c1.652 0 3.144 0.676 4.195 1.762 1.308-0.253 2.54-0.714 3.648-1.352-0.428 1.301-1.34 2.393-2.525 3.083 1.16-0.136 2.27-0.434 3.301-0.88-0.773 1.117-1.745 2.1-2.868 2.886 0.011 0.239 0.017 0.479 0.017 0.719 0 7.366-5.782 15.863-16.354 15.863-3.245 0-6.268-0.926-8.809-2.507 0.449 0.052 0.906 0.079 1.37 0.079 2.692 0 5.172-0.89 7.139-2.387-2.517-0.043-4.641-1.657-5.369-3.87 0.351 0.066 0.711 0.101 1.082 0.101 0.522 0 1.032-0.067 1.512-0.195-2.629-0.511-4.611-2.764-4.611-5.467v-0.072c0.776 0.418 1.661 0.669 2.605 0.698-1.543-1.001-2.558-2.705-2.558-4.64 0-1.022 0.284-1.981 0.779-2.801 2.834 3.371 7.069 5.591 11.847 5.824-0.098-0.407-0.149-0.837-0.149-1.27 0-3.079 2.574-5.575 5.749-5.575zM30.006 7.572v0zM21.387 2.959c-3.927 0-7.18 2.869-7.681 6.576-3.213-0.646-6.135-2.346-8.235-4.842-0.381-0.454-0.942-0.713-1.531-0.713-0.052 0-0.104 0.002-0.157 0.006-0.643 0.052-1.223 0.41-1.556 0.962-0.698 1.157-1.066 2.482-1.066 3.833 0 0.902 0.162 1.779 0.469 2.601-0.327 0.364-0.515 0.839-0.515 1.341v0.072c0 1.959 0.774 3.777 2.061 5.139-0.074 0.343-0.058 0.702 0.055 1.046 0.444 1.349 1.251 2.512 2.298 3.398-0.703 0.157-1.428 0.235-2.169 0.235-0.392 0-0.773-0.021-1.133-0.066-0.080-0.010-0.159-0.014-0.238-0.014-0.84 0-1.603 0.529-1.885 1.337-0.31 0.885 0.034 1.866 0.83 2.361 2.954 1.838 6.366 2.808 9.866 2.808 11.376 0 18.219-8.905 18.352-17.605 0.931-0.771 1.754-1.662 2.451-2.661 0.254-0.334 0.405-0.751 0.405-1.203 0-0.681-0.34-1.282-0.859-1.644 0.224-0.769-0.032-1.603-0.657-2.111-0.365-0.297-0.813-0.448-1.262-0.448-0.344 0-0.689 0.088-0.999 0.268-0.661 0.381-1.368 0.683-2.113 0.9-1.347-1.014-3.017-1.578-4.732-1.578z"></path>
+          </svg>
+
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link p-2" href="https://t.me/orchid_community" target="_blank" rel="noopener"
+           aria-label="Telegram">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="navbar-nav-svg" height="36" role="img"
+               fill="currentColor">
+            <path d="M28.784 3.226l-10.508 24.556-3.729-10.766-10.756-3.251zM31.389 0.024c-0.191 0-0.422 0.054-0.691 0.167l-29.833 12.659c-1.075 0.456-1.143 1.335-0.151 1.952l12.353 3.862 4.043 12.602c0.29 0.474 0.64 0.71 0.977 0.71 0.373 0 0.728-0.286 0.97-0.852l12.759-29.804c0.346-0.809 0.149-1.296-0.426-1.296z"></path>
+          </svg>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link p-2" href="https://opencollective.com/orchid" target="_blank" rel="noopener"
+           aria-label="Open Collective">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 41" class="navbar-nav-svg" height="36" role="img"
+               fill="currentColor">
+            <path fill-opacity=".4"
+                  d="M32.8 21c0 2.4-.8 4.9-2 6.9l5.1 5.1c2.5-3.4 4.1-7.6 4.1-12 0-4.6-1.6-8.8-4-12.2L30.7 14c1.2 2 2 4.3 2 7z"></path>
+            <path d="M20 33.7a12.8 12.8 0 0 1 0-25.6c2.6 0 5 .7 7 2.1L32 5a20 20 0 1 0 .1 31.9l-5-5.2a13 13 0 0 1-7 2z"></path>
+          </svg>
+        </a>
+      </li>
+    </ul>
+
+  </div>
+</header>
+<div class="masthead bg-light">
+  <div class="container">
+    <a href="/" aria-label="orchid">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" height="72" class="bs-docs-booticon mb-3" role="img" fill="currentColor">
+        <g>
+          <path d="M86.55 30.73c-11.33 10.72-27.5 12.65-42.3 14.43-10.94 1.5-23.3 3.78-30.48 13.04-6.2 8.3-4.25 20.3 2.25 27.8 1.35 2.03 5.7 5.7 6.38 5.3-5.96-8.42-5.88-21.6 2.6-28.4 8.97-7.52 21.2-7.1 32.03-9.7 6.47-1.23 13.3-3.5 19.2-5.34-8.3 7.44-19.38 10.36-29.7 13.75-8.7 3.08-17.22 10.23-17.45 20.1-.17 6.8 3.1 14.9 10.06 17.07 18.56 4.34 39.14-3.16 50.56-18.4 12.7-16.12 13.75-40.2 2.43-57.33-1.33 2.9-3.28 5.5-5.58 7.7z"></path>
+          <path d="M0 49.97c-.14 4.35 1.24 13.9 2.63 14.64 1.2-11.48 10.2-20.74 20.83-24.47 17.9-7.06 38.75-3.1 55.66-13.18 5.16-2.3 9.28-9.48 4.36-14.1-2.16-1.76-5.9-5.75-3.7-.72.83 6.22-5.47 10.06-10.63 11.65-10.9 3.34-22.46 3-33.62 4.93-1.9.32-5.9 1.2-2.07-.6 10.52-5.02 23.57-4.38 32.6-12.5 4.8-3.75 2.77-11.16-2.4-13.4C57.4-.35 50.3-.35 43.63.35c-19.85 2.3-37.3 17.7-42.05 37.1C.52 41.57 0 45.77 0 49.97z"></path>
+        </g>
+      </svg>
+
+      <h1 class="f2">Laravel Orchid Blog</h1>
+    </a>
+    <p class="f5">
+      News and announcements for all things <a href="/" title="Visit the Laravel Orchid docs">Laravel Orchid</a>, including related projects.
+    </p>
+  </div>
+</div>
+
+
+<div class="container">
+    
+    <div class="posts-container px-3 mx-auto my-5">
+        <div class="post">
+            <h1 class="post-title fw-500">
+                Reusing layers
+            </h1>
+
+            <span class="post-date mb-4">Alexandr Chernyaev  •  July 1, 2020</span>
+
+            
+            <p>Layouts are easy to reuse when fields are related to the relations of different models. During installation, we have a layer for defining permissions, which is used immediately at the user and roles editing screen. But sometimes you want to apply the same set of fields with different values. Let's consider an example when you need to specify an address.</p>
+
+<p>Such a set will be both for the client, the customer, and it will appear twice on the same form (for example, in order, delivery and invoice). To solve this situation, you do not need to create and describe almost identical layouts. Instead, let's add logic to one single layer.</p>
+
+<pre><code class="language-php">namespace App\Orchid\Layouts;
+
+use Orchid\Screen\Field;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Label;
+use Orchid\Screen\Layouts\Rows;
+
+class AddressLayout extends Rows
+{
+    /**
+     * Used to create the title of a group of form elements.
+     *
+     * @var string|null
+     */
+    protected $title;
+
+    /**
+     * Prefix for a field name
+     *
+     * @var string
+     */
+    protected $prefix;
+
+    /**
+     * ReusableEditLayout constructor.
+     *
+     * @param string      $prefix
+     * @param string|null $title
+     */
+    public function __construct(string $prefix, string $title = null)
+    {
+        $this-&gt;prefix = $prefix;
+        $this-&gt;title = $title;
+    }
+
+    /**
+     * Views.
+     *
+     * @return Field[]
+     */
+    protected function fields(): array
+    {
+        return [
+            Input::make($this-&gt;prefix . '.address')
+                -&gt;required()
+                -&gt;title('Address')
+                -&gt;placeholder('177A Bleecker Street'),
+        ];
+    }
+}
+</code></pre>
+
+<p>Now, when used, we will pass the prefix and header values:</p>
+
+<pre><code class="language-php">public function layout(): array
+{
+    return [
+        Layout::columns([
+            new AddressLayout('order.shipping_address', 'Shipping Address'),
+            new AddressLayout('order.invoice_address', 'Invoice Address'),
+        ]),
+    ];
+}
+</code></pre>
+
+<p>But this is also inconvenient. Why? Now in the definition, we will think, do we need to end the prefix with a dot? And also, specify strange names through the concatenation <code>$this-&gt;prefix. '.address'</code>.</p>
+
+<p>Let's fix it! Since the main thing is to return an array of objects, you can modify the fields before returning, as well as take care of the point in the constructor:</p>
+
+<pre><code class="language-php">namespace App\Orchid\Layouts;
+
+use Illuminate\Support\Str;
+use Orchid\Screen\Field;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Layouts\Rows;
+
+class AddressLayout extends Rows
+{
+    /**
+     * Used to create the title of a group of form elements.
+     *
+     * @var string|null
+     */
+    protected $title;
+
+    /**
+     * Prefix for a field name
+     *
+     * @var string
+     */
+    protected $prefix;
+
+    /**
+     * ReusableEditLayout constructor.
+     *
+     * @param string      $prefix
+     * @param string|null $title
+     */
+    public function __construct(string $prefix, string $title = null)
+    {
+        $this-&gt;prefix = Str::finish($prefix, '.');
+        $this-&gt;title = $title;
+    }
+
+    /**
+     * Get the fields elements to be displayed.
+     *
+     * @return Field[]
+     */
+    protected function fields(): array
+    {
+        return $this-&gt;addPrefix([
+            Input::make('address')
+                -&gt;required()
+                -&gt;title('Address')
+                -&gt;placeholder('177A Bleecker Street'),
+        ]);
+    }
+
+    /**
+     * @param Field[] $fields
+     *
+     * @return array
+     */
+    protected function addPrefix(array $fields): array
+    {
+        return array_map(function (Field $field) {
+            return $field-&gt;set('name',
+                $this-&gt;prefix . $field-&gt;get('name')
+            );
+        }, $fields);
+    }
+}
+</code></pre>
+
+<p>The main task has been solved. Now, the reuse of a class with one set of fields for the address does not make you think and duplicate it.</p>
+        </div>
+
+
+        <div class="pagination">
+                            <span class="pagination-item older">Older</span>
+            
+                            <span class="pagination-item newer">Newer</span>
+                    </div>
+    </div>
+</div>
+
+
+<footer class="bd-footer p-3 p-md-5 mt-5 text-center text-muted bg-light">
+  <div class="container">
+    <ul class="bd-footer-links">
+      <li><a href="https://github.com/orchidsoftware">GitHub</a></li>
+      <li><a href="https://twitter.com/orchid_platform">Twitter</a></li>
+      <li><a href="https://t.me/orchid_community">Telegram</a></li>
+      <li><a href="https://orchid.software">Documentation</a></li>
+      <li><a href="https://blog.orchid.software/feed.atom">RSS Feed</a></li>
+    </ul>
+
+
+    <p class="mb-0">Crafted with <span class="mr-1">❤️</span> by Alexandr Chernyaev</p>
+    <p class="mb-0">The Laravel Orchid Blog is open source under the <a href="https://github.com/orchidsoftware/blog/blob/master/LICENSE.txt">MIT license</a>.</p>
+  </div>
+</footer>
+
+<script src="/assets/build/js/main.js?id=ebd2ef3cb16bdcaca79b"></script>
+
+</body>
+</html>
