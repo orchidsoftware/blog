@@ -1,6 +1,6 @@
 <div class="masthead bg-light">
   <div class="container">
-    <a href="/" aria-label="Bootstrap">
+    <a href="/" aria-label="orchid">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" height="72" class="bs-docs-booticon mb-3" role="img" fill="currentColor">
         <g>
           <path d="M86.55 30.73c-11.33 10.72-27.5 12.65-42.3 14.43-10.94 1.5-23.3 3.78-30.48 13.04-6.2 8.3-4.25 20.3 2.25 27.8 1.35 2.03 5.7 5.7 6.38 5.3-5.96-8.42-5.88-21.6 2.6-28.4 8.97-7.52 21.2-7.1 32.03-9.7 6.47-1.23 13.3-3.5 19.2-5.34-8.3 7.44-19.38 10.36-29.7 13.75-8.7 3.08-17.22 10.23-17.45 20.1-.17 6.8 3.1 14.9 10.06 17.07 18.56 4.34 39.14-3.16 50.56-18.4 12.7-16.12 13.75-40.2 2.43-57.33-1.33 2.9-3.28 5.5-5.58 7.7z"></path>
@@ -11,7 +11,7 @@
       <h1 class="f2">Laravel Orchid Blog</h1>
     </a>
     <p class="f5">
-      News and announcements for all things <a href="/" title="Visit the Bootstrap docs">Laravel Orchid</a>, including new releases, <a href="{{ site.themes }}" title="Browse the official Bootstrap themes">Bootstrap Themes</a>, and <a href="{{ site.icons }}" title="Official open source Bootstrap Icons">Bootstrap Icons</a>.
+      News and announcements for all things <a href="/" title="Visit the Laravel Orchid docs">Laravel Orchid</a>, including related projects.
     </p>
   </div>
 </div>

@@ -23,6 +23,9 @@ pagination:
 
                     <span class="post-date mb-2">{{ $post->getDate()->format('F j, Y') }}</span>
 
+                    @if($post->cover_image)
+                        <img src="{{ $post->cover_image }}" class="cover-image">
+                    @endisset
 
                     {!! $post->getExcerpt(200) !!}
                 </div>
@@ -36,10 +39,11 @@ pagination:
                     <a
                             href="{{ $previous }}"
                             title="Previous Page"
-                            class="pagination-item older"
+                            class="pagination-item older mr-auto"
                     >&LeftArrow;</a>
                 @endif
 
+                {{--
                 @foreach ($pagination->pages as $pageNumber => $path)
                     <a
                             href="{{ $path }}"
@@ -47,12 +51,13 @@ pagination:
                             class="pagination-item newer {{ $pagination->currentPage == $pageNumber ? 'text-blue-600' : 'text-blue-700' }}"
                     >{{ $pageNumber }}</a>
                 @endforeach
+                --}}
 
                 @if ($next = $pagination->next)
                     <a
                             href="{{ $next }}"
                             title="Next Page"
-                            class="pagination-item newer"
+                            class="pagination-item newer ml-auto"
                     >&RightArrow;</a>
                 @endif
             </div>

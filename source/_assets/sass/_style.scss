@@ -4,6 +4,7 @@
 
 @import '~highlight.js/styles/dracula.css';
 
+@import '~bootstrap/scss/bootstrap';
 @import "variables";
 @import "theme";
 @import "buttons";
@@ -151,6 +152,12 @@ tbody tr:nth-child(odd) th {
   margin-bottom: 2rem;
 }
 
+.cover-image{
+  width: 100%;
+  object-fit: cover;
+  max-height: 300px;
+}
+
 
 // Pagination
 //
@@ -248,4 +255,10 @@ iframe[data-url^="https://jsbin.com"] {
 
 .hljs{
   padding: 1em;
+}
+
+svg{
+  display: inline-block;
+  vertical-align: text-bottom;
+  fill: currentColor;
 }

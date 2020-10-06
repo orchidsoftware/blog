@@ -3,11 +3,11 @@
 use Illuminate\Support\Str;
 
 return [
-    'baseUrl' => '',
+    'baseUrl' => 'http://localhost:3000',
     'production' => false,
-    'siteName' => 'Blog Starter Template',
-    'siteDescription' => 'Generate an elegant blog with Jigsaw',
-    'siteAuthor' => 'Author Name',
+    'siteName' => 'Laravel Orchid Blog',
+    'siteDescription' => 'News and announcements for all things Laravel Orchid, including related projects.',
+    'siteAuthor' => 'Alexandr Chernyaev',
 
     // collections
     'collections' => [

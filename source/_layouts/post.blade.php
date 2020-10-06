@@ -14,6 +14,10 @@
 
             <span class="post-date mb-4">{{ $page->author }}  •  {{ $page->getDate()->format('F j, Y') }}</span>
 
+            @if($page->cover_image)
+                <img src="{{ $page->cover_image }}" class="cover-image">
+            @endisset
+
             @yield('content')
         </div>
 
