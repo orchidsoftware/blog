@@ -4,7 +4,7 @@ section: content
 title: SVG Icons
 date: 2020-09-19
 description: We use our own sets of icons in the admin panel
-cover_image: /assets/img/svg-icons/cc6rghokf83xr80dh899.jpg
+cover_image: /assets/img/svg-icons/cc6rghokf83xr80dh899.png
 ---
 
 
