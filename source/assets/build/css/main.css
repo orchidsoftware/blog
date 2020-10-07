@@ -10246,6 +10246,10 @@ h3 {
   margin-bottom: 0;
 }
 
+pre code {
+  font-size: 0.9em;
+}
+
 blockquote {
   padding: 0.5rem 1rem;
   margin: 0.8rem 0;
