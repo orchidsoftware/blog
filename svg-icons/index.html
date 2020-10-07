@@ -4,14 +4,14 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="description" content="Reusing layers for Laravel Orchid">
+        <meta name="description" content="We use our own sets of icons in the admin panel">
 
-        <meta property="og:title" content="Reusing layers | Laravel Orchid"/>
+        <meta property="og:title" content="SVG Icons | Laravel Orchid"/>
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://blog.orchid.software/reusing-layers"/>
-        <meta property="og:description" content="Reusing layers for Laravel Orchid" />
+        <meta property="og:url" content="https://blog.orchid.software/svg-icons"/>
+        <meta property="og:description" content="We use our own sets of icons in the admin panel" />
 
-        <title>Reusing layers | Laravel Orchid</title>
+        <title>SVG Icons | Laravel Orchid</title>
 
         <link rel="home" href="https://blog.orchid.software">
         <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
@@ -107,164 +107,53 @@
     <div class="posts-container px-3 mx-auto my-5">
         <div class="post">
             <h1 class="post-title fw-500">
-                Reusing layers
+                SVG Icons
             </h1>
 
-            <span class="post-date mb-4">Alexandr Chernyaev  •  July 1, 2020</span>
+            <span class="post-date mb-4">Alexandr Chernyaev  •  September 19, 2020</span>
 
+                            <img src="/assets/img/svg-icons/cc6rghokf83xr80dh899.jpg" class="cover-image">
             
-            <p>Layouts are easy to reuse when fields are related to the relations of different models. During installation, we have a layer for defining permissions, which is used immediately at the user and roles editing screen. But sometimes you want to apply the same set of fields with different values. Let's consider an example when you need to specify an address.</p>
+            <p>In the latest release of the package, I replaced <code>Icon Fonts</code> in favor of the SVG format, which means that now icons are available in a vector.</p>
 
-<p>Such a set will be both for the client, the customer, and it will appear twice on the same form (for example, in order, delivery and invoice). To solve this situation, you do not need to create and describe almost identical layouts. Instead, let's add logic to one single layer.</p>
+<p>Previously, if you needed to display your own (or from the Internet) icon, you could translate it into a font and include a CSS file with a description. Now, this is not needed. It is enough to copy the desired icon to the project.</p>
 
-<pre><code class="language-php">namespace App\Orchid\Layouts;
+<p>Let's do it together. Let's say we want to include an icon from the popular Font Awesome. To do this, select a suitable storage directory, for example, create a new <code>icons</code> directory and a <code>fontawesome</code> subdirectory:</p>
 
-use Orchid\Screen\Field;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Label;
-use Orchid\Screen\Layouts\Rows;
-
-class AddressLayout extends Rows
-{
-    /**
-     * Used to create the title of a group of form elements.
-     *
-     * @var string|null
-     */
-    protected $title;
-
-    /**
-     * Prefix for a field name
-     *
-     * @var string
-     */
-    protected $prefix;
-
-    /**
-     * ReusableEditLayout constructor.
-     *
-     * @param string      $prefix
-     * @param string|null $title
-     */
-    public function __construct(string $prefix, string $title = null)
-    {
-        $this-&gt;prefix = $prefix;
-        $this-&gt;title = $title;
-    }
-
-    /**
-     * Views.
-     *
-     * @return Field[]
-     */
-    protected function fields(): array
-    {
-        return [
-            Input::make($this-&gt;prefix . '.address')
-                -&gt;required()
-                -&gt;title('Address')
-                -&gt;placeholder('177A Bleecker Street'),
-        ];
-    }
-}
+<pre><code class="language-bash">resources
+  - css 
+  - icons
+      -- fontawesome 
+  - js
+  - lang
+  - views
 </code></pre>
 
-<p>Now, when used, we will pass the prefix and header values:</p>
+<p>Load the appropriate icons into the new directory, for example, this <a href="https://github.com/FortAwesome/Font-Awesome/blob/ce084cb3463f15fd6b001eb70622d00a0e43c56c/svgs/solid/address-book.svg">notebook icon</a>. Then we will indicate to the package the directory in which we need to search for our images, for this we will edit the configuration file <code>config/platform.php</code>:</p>
 
-<pre><code class="language-php">public function layout(): array
-{
-    return [
-        Layout::columns([
-            new AddressLayout('order.shipping_address', 'Shipping Address'),
-            new AddressLayout('order.invoice_address', 'Invoice Address'),
-        ]),
-    ];
-}
+<pre><code class="language-php">'icons' =&gt; [
+    'fa' =&gt; resource_path('icons/fontawesome')
+],
 </code></pre>
 
-<p>But this is also inconvenient. Why? Now in the definition, we will think, do we need to end the prefix with a dot? And also, specify strange names through the concatenation <code>$this-&gt;prefix. '.address'</code>.</p>
+<p>All we have done here is declare the prefix by which we will refer to fa and the directory where the files are located.
+To display in the components of the package, you only need to pass the prefix + name, for example, the definition of the icon in the menu will look like this:</p>
 
-<p>Let's fix it! Since the main thing is to return an array of objects, you can modify the fields before returning, as well as take care of the point in the constructor:</p>
-
-<pre><code class="language-php">namespace App\Orchid\Layouts;
-
-use Illuminate\Support\Str;
-use Orchid\Screen\Field;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Layouts\Rows;
-
-class AddressLayout extends Rows
-{
-    /**
-     * Used to create the title of a group of form elements.
-     *
-     * @var string|null
-     */
-    protected $title;
-
-    /**
-     * Prefix for a field name
-     *
-     * @var string
-     */
-    protected $prefix;
-
-    /**
-     * ReusableEditLayout constructor.
-     *
-     * @param string      $prefix
-     * @param string|null $title
-     */
-    public function __construct(string $prefix, string $title = null)
-    {
-        $this-&gt;prefix = Str::finish($prefix, '.');
-        $this-&gt;title = $title;
-    }
-
-    /**
-     * Get the fields elements to be displayed.
-     *
-     * @return Field[]
-     */
-    protected function fields(): array
-    {
-        return $this-&gt;addPrefix([
-            Input::make('address')
-                -&gt;required()
-                -&gt;title('Address')
-                -&gt;placeholder('177A Bleecker Street'),
-        ]);
-    }
-
-    /**
-     * @param Field[] $fields
-     *
-     * @return array
-     */
-    protected function addPrefix(array $fields): array
-    {
-        return array_map(function (Field $field) {
-            return $field-&gt;set('name',
-                $this-&gt;prefix . $field-&gt;get('name')
-            );
-        }, $fields);
-    }
-}
+<pre><code class="language-php">ItemMenu::label('Example of custom icons')
+    -&gt;icon('fa.address-book')
+    -&gt;url(#);
 </code></pre>
 
-<p>The main task has been solved. Now, the reuse of a class with one set of fields for the address does not make you think and duplicate it.</p>
+<p>Moreover, if, for some reason, your project does not have <a href="http://orchid.software/">Laravel Orchid</a>, then a separate <a href="https://github.com/orchidsoftware/blade-icons">package has been prepared for the Blade and SVG template engine</a>.</p>
         </div>
 
 
         <div class="pagination">
-                            <a href="https://blog.orchid.software/dive-into-elements-and-forms" title="Older Post: Dive into “Elements and Forms”" class="pagination-item older">
-                    &LeftArrow; Dive into “Elements and Forms”
+                            <a href="https://blog.orchid.software/draw-model-charts" title="Older Post: Draw model charts" class="pagination-item older">
+                    &LeftArrow; Draw model charts
                 </a>
             
-                            <a href="https://blog.orchid.software/draw-model-charts" title="Newer Post: Draw model charts"
-                   class="pagination-item newer">
-                    Draw model charts &RightArrow;
-                </a>
+                            <span class="pagination-item newer">Newer</span>
                     </div>
     </div>
 </div>

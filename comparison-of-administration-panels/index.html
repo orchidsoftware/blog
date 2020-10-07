@@ -4,14 +4,14 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="description" content="Reusing layers for Laravel Orchid">
+        <meta name="description" content="Comparing the complexity of the code for different admin panels in laravel">
 
-        <meta property="og:title" content="Reusing layers | Laravel Orchid"/>
+        <meta property="og:title" content="Comparison of administration panels | Laravel Orchid"/>
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://blog.orchid.software/reusing-layers"/>
-        <meta property="og:description" content="Reusing layers for Laravel Orchid" />
+        <meta property="og:url" content="https://blog.orchid.software/comparison-of-administration-panels"/>
+        <meta property="og:description" content="Comparing the complexity of the code for different admin panels in laravel" />
 
-        <title>Reusing layers | Laravel Orchid</title>
+        <title>Comparison of administration panels | Laravel Orchid</title>
 
         <link rel="home" href="https://blog.orchid.software">
         <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
@@ -107,163 +107,86 @@
     <div class="posts-container px-3 mx-auto my-5">
         <div class="post">
             <h1 class="post-title fw-500">
-                Reusing layers
+                Comparison of administration panels
             </h1>
 
-            <span class="post-date mb-4">Alexandr Chernyaev  •  July 1, 2020</span>
+            <span class="post-date mb-4">Alexandr Chernyaev  •  March 3, 2019</span>
 
             
-            <p>Layouts are easy to reuse when fields are related to the relations of different models. During installation, we have a layer for defining permissions, which is used immediately at the user and roles editing screen. But sometimes you want to apply the same set of fields with different values. Let's consider an example when you need to specify an address.</p>
+            <p>In 2017, <a href="http://medium.com/@taylorotwell">Taylor Otwell</a> published several articles, not comparing features or convenience, but the code results for various frameworks, where Laravel was the clear favorite.</p>
 
-<p>Such a set will be both for the client, the customer, and it will appear twice on the same form (for example, in order, delivery and invoice). To solve this situation, you do not need to create and describe almost identical layouts. Instead, let's add logic to one single layer.</p>
+<p><a href="http://medium.com/@taylorotwell/framework-average-class-size-comparison-63722a8ed9cf">Average class size comparison</a></p>
 
-<pre><code class="language-php">namespace App\Orchid\Layouts;
+<blockquote>
+  <p>Framework Average Class Size Comparison ... I published some average method complexity statistics yesterday. One rebuttal to those statistics was that Laravel's ...</p>
+</blockquote>
 
-use Orchid\Screen\Field;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Label;
-use Orchid\Screen\Layouts\Rows;
+<p><a href="http://medium.com/@taylorotwell/measuring-code-complexity-64356da605f9">and code complexity comparison</a></p>
 
-class AddressLayout extends Rows
-{
-    /**
-     * Used to create the title of a group of form elements.
-     *
-     * @var string|null
-     */
-    protected $title;
+<blockquote>
+  <p>Framework Code Complexity Comparison ... Last week, as I was refactoring and cleaning Laravel for the 5.4 release, Graham Campbell showed me some code complexity ...</p>
+</blockquote>
 
-    /**
-     * Prefix for a field name
-     *
-     * @var string
-     */
-    protected $prefix;
+<p>The measurements were taken using the <a href="https://github.com/sebastianbergmann/phploc">phploc</a> tool. I think it would be a good idea to do the same analysis for the administration packages. <strong>Less is better.</strong></p>
 
-    /**
-     * ReusableEditLayout constructor.
-     *
-     * @param string      $prefix
-     * @param string|null $title
-     */
-    public function __construct(string $prefix, string $title = null)
-    {
-        $this-&gt;prefix = $prefix;
-        $this-&gt;title = $title;
-    }
+<p><strong>Backpack:</strong></p>
 
-    /**
-     * Views.
-     *
-     * @return Field[]
-     */
-    protected function fields(): array
-    {
-        return [
-            Input::make($this-&gt;prefix . '.address')
-                -&gt;required()
-                -&gt;title('Address')
-                -&gt;placeholder('177A Bleecker Street'),
-        ];
-    }
-}
-</code></pre>
+<ul>
+<li>17 834 lines</li>
+<li>23 medium long,</li>
+<li>9.51 average class difficulty</li>
+</ul>
 
-<p>Now, when used, we will pass the prefix and header values:</p>
+<p><strong>Nova:</strong></p>
 
-<pre><code class="language-php">public function layout(): array
-{
-    return [
-        Layout::columns([
-            new AddressLayout('order.shipping_address', 'Shipping Address'),
-            new AddressLayout('order.invoice_address', 'Invoice Address'),
-        ]),
-    ];
-}
-</code></pre>
+<ul>
+<li>19 701 lines</li>
+<li>10 medium length</li>
+<li>3.26 average class difficulty</li>
+</ul>
 
-<p>But this is also inconvenient. Why? Now in the definition, we will think, do we need to end the prefix with a dot? And also, specify strange names through the concatenation <code>$this-&gt;prefix. '.address'</code>.</p>
+<p><strong>SleepingOwl:</strong></p>
 
-<p>Let's fix it! Since the main thing is to return an array of objects, you can modify the fields before returning, as well as take care of the point in the constructor:</p>
+<ul>
+<li>27 256 lines</li>
+<li>16 medium long</li>
+<li>4.81 average class difficulty</li>
+</ul>
 
-<pre><code class="language-php">namespace App\Orchid\Layouts;
+<p><strong>Orchid:</strong></p>
 
-use Illuminate\Support\Str;
-use Orchid\Screen\Field;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Layouts\Rows;
+<ul>
+<li>12,753 lines</li>
+<li>10 medium length</li>
+<li>2.68 average class difficulty</li>
+</ul>
 
-class AddressLayout extends Rows
-{
-    /**
-     * Used to create the title of a group of form elements.
-     *
-     * @var string|null
-     */
-    protected $title;
+<p><strong>Voyager:</strong></p>
 
-    /**
-     * Prefix for a field name
-     *
-     * @var string
-     */
-    protected $prefix;
+<ul>
+<li>10,744 lines</li>
+<li>11 medium long</li>
+<li>4.59 average class difficulty</li>
+</ul>
 
-    /**
-     * ReusableEditLayout constructor.
-     *
-     * @param string      $prefix
-     * @param string|null $title
-     */
-    public function __construct(string $prefix, string $title = null)
-    {
-        $this-&gt;prefix = Str::finish($prefix, '.');
-        $this-&gt;title = $title;
-    }
+<p><strong>Z-song/laravel-admin:</strong></p>
 
-    /**
-     * Get the fields elements to be displayed.
-     *
-     * @return Field[]
-     */
-    protected function fields(): array
-    {
-        return $this-&gt;addPrefix([
-            Input::make('address')
-                -&gt;required()
-                -&gt;title('Address')
-                -&gt;placeholder('177A Bleecker Street'),
-        ]);
-    }
+<ul>
+<li>26,292 lines</li>
+<li>22 medium length</li>
+<li>6.40 average class difficulty</li>
+</ul>
 
-    /**
-     * @param Field[] $fields
-     *
-     * @return array
-     */
-    protected function addPrefix(array $fields): array
-    {
-        return array_map(function (Field $field) {
-            return $field-&gt;set('name',
-                $this-&gt;prefix . $field-&gt;get('name')
-            );
-        }, $fields);
-    }
-}
-</code></pre>
-
-<p>The main task has been solved. Now, the reuse of a class with one set of fields for the address does not make you think and duplicate it.</p>
+<p>Measurements were carried out in the <code>src</code> directory, only for files with the <code>.php</code> extension, the latest versions of packages as of March 3, 2019, were used.</p>
         </div>
 
 
         <div class="pagination">
-                            <a href="https://blog.orchid.software/dive-into-elements-and-forms" title="Older Post: Dive into “Elements and Forms”" class="pagination-item older">
-                    &LeftArrow; Dive into “Elements and Forms”
-                </a>
+                            <span class="pagination-item older">Older</span>
             
-                            <a href="https://blog.orchid.software/draw-model-charts" title="Newer Post: Draw model charts"
+                            <a href="https://blog.orchid.software/dive-into-elements-and-forms" title="Newer Post: Dive into “Elements and Forms”"
                    class="pagination-item newer">
-                    Draw model charts &RightArrow;
+                    Dive into “Elements and Forms” &RightArrow;
                 </a>
                     </div>
     </div>

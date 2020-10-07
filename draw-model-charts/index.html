@@ -4,14 +4,14 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="description" content="Reusing layers for Laravel Orchid">
+        <meta name="description" content="Let&#039;s try it in action and form a visual dynamics of user registrations">
 
-        <meta property="og:title" content="Reusing layers | Laravel Orchid"/>
+        <meta property="og:title" content="Draw model charts | Laravel Orchid"/>
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://blog.orchid.software/reusing-layers"/>
-        <meta property="og:description" content="Reusing layers for Laravel Orchid" />
+        <meta property="og:url" content="https://blog.orchid.software/draw-model-charts"/>
+        <meta property="og:description" content="Let&#039;s try it in action and form a visual dynamics of user registrations" />
 
-        <title>Reusing layers | Laravel Orchid</title>
+        <title>Draw model charts | Laravel Orchid</title>
 
         <link rel="home" href="https://blog.orchid.software">
         <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
@@ -107,163 +107,157 @@
     <div class="posts-container px-3 mx-auto my-5">
         <div class="post">
             <h1 class="post-title fw-500">
-                Reusing layers
+                Draw model charts
             </h1>
 
-            <span class="post-date mb-4">Alexandr Chernyaev  •  July 1, 2020</span>
+            <span class="post-date mb-4">Alexandr Chernyaev  •  August 5, 2020</span>
 
+                            <img src="/assets/img/draw-model-charts/x4w1qcdys4p2qtu9ect8.png" class="cover-image">
             
-            <p>Layouts are easy to reuse when fields are related to the relations of different models. During installation, we have a layer for defining permissions, which is used immediately at the user and roles editing screen. But sometimes you want to apply the same set of fields with different values. Let's consider an example when you need to specify an address.</p>
+            <p>Building charts can be awkward, but since <code>7.15.0</code>, a trait has been added to <a href="http://orchid.software/">Laravel Orchid</a> to generate group and time data.
+To use it, you should add the trait <code>Orchid\Metrics\Chartable</code> to the model.</p>
 
-<p>Such a set will be both for the client, the customer, and it will appear twice on the same form (for example, in order, delivery and invoice). To solve this situation, you do not need to create and describe almost identical layouts. Instead, let's add logic to one single layer.</p>
+<p>Let's try it in action and form a visual dynamics of user registrations. To do this, let's create a new layer using the command:</p>
+
+<pre><code class="language-php"> php artisan orchid:chart DynamicsOfRegistrations
+</code></pre>
+
+<p>In <code>app/Orchid/Layouts</code> directory, a new class will be created, we will add the name and the target key to it:</p>
 
 <pre><code class="language-php">namespace App\Orchid\Layouts;
 
-use Orchid\Screen\Field;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Label;
-use Orchid\Screen\Layouts\Rows;
+use Orchid\Screen\Layouts\Chart;
 
-class AddressLayout extends Rows
+class DynamicsOfRegistrations extends Chart
 {
     /**
-     * Used to create the title of a group of form elements.
-     *
-     * @var string|null
-     */
-    protected $title;
-
-    /**
-     * Prefix for a field name
+     * Add a title to the Chart.
      *
      * @var string
      */
-    protected $prefix;
+    protected $title = 'New members';
 
     /**
-     * ReusableEditLayout constructor.
+     * Data source.
      *
-     * @param string      $prefix
-     * @param string|null $title
-     */
-    public function __construct(string $prefix, string $title = null)
-    {
-        $this-&gt;prefix = $prefix;
-        $this-&gt;title = $title;
-    }
-
-    /**
-     * Views.
+     * The name of the key to fetch it from the query.
+     * The results of which will be elements of the. Wet.
      *
-     * @return Field[]
+     * @var string
      */
-    protected function fields(): array
-    {
-        return [
-            Input::make($this-&gt;prefix . '.address')
-                -&gt;required()
-                -&gt;title('Address')
-                -&gt;placeholder('177A Bleecker Street'),
-        ];
-    }
+    protected $target = 'registrations';
 }
 </code></pre>
 
-<p>Now, when used, we will pass the prefix and header values:</p>
+<p>The standard package comes with a screen displaying all users. Why not use it. Let's add a new query value to the <code>UserListScreen</code>:</p>
+
+<pre><code class="language-php">public function query(): array
+{
+    return [
+        'registrations' =&gt; [
+            User::countByDays()-&gt;toChart('Users'),
+        ],
+        // ... other values
+    ]
+}
+</code></pre>
+
+<p>All that's left is to put a layer on the screen:</p>
 
 <pre><code class="language-php">public function layout(): array
 {
     return [
-        Layout::columns([
-            new AddressLayout('order.shipping_address', 'Shipping Address'),
-            new AddressLayout('order.invoice_address', 'Invoice Address'),
-        ]),
+        DynamicsOfRegistrations::class,
+        // ... other layouts
     ];
 }
 </code></pre>
 
-<p>But this is also inconvenient. Why? Now in the definition, we will think, do we need to end the prefix with a dot? And also, specify strange names through the concatenation <code>$this-&gt;prefix. '.address'</code>.</p>
+<p>Now going to the user list page, we will see how many users have registered in the last month:</p>
 
-<p>Let's fix it! Since the main thing is to return an array of objects, you can modify the fields before returning, as well as take care of the point in the constructor:</p>
+<p><img src="/assets/img/draw-model-charts/x4w1qcdys4p2qtu9ect8.png" alt="Dynamics Of Registrations" /></p>
+
+<p>That's great. But let's also show the statistics of how many users have enabled two-factor authentication (by the way, here is an <a href="https://dev.to/tabuna/how-to-enable-two-factor-authentication-in-laravel-orchid-2eim">article on how to enable it</a>). For this, we will also create a new layer, but with different values:</p>
 
 <pre><code class="language-php">namespace App\Orchid\Layouts;
 
-use Illuminate\Support\Str;
-use Orchid\Screen\Field;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Layouts\Rows;
+use Orchid\Screen\Layouts\Chart;
 
-class AddressLayout extends Rows
+class UsageTwoFactorAuth extends Chart
 {
     /**
-     * Used to create the title of a group of form elements.
-     *
-     * @var string|null
-     */
-    protected $title;
-
-    /**
-     * Prefix for a field name
+     * Add a title to the Chart.
      *
      * @var string
      */
-    protected $prefix;
+    protected $title = 'Usage two-factor authentication';
 
     /**
-     * ReusableEditLayout constructor.
+     * Available options:
+     * 'bar', 'line',
+     * 'pie', 'percentage'.
      *
-     * @param string      $prefix
-     * @param string|null $title
+     * @var string
      */
-    public function __construct(string $prefix, string $title = null)
-    {
-        $this-&gt;prefix = Str::finish($prefix, '.');
-        $this-&gt;title = $title;
-    }
+    protected $type = 'pie';
 
     /**
-     * Get the fields elements to be displayed.
+     * Data source.
      *
-     * @return Field[]
-     */
-    protected function fields(): array
-    {
-        return $this-&gt;addPrefix([
-            Input::make('address')
-                -&gt;required()
-                -&gt;title('Address')
-                -&gt;placeholder('177A Bleecker Street'),
-        ]);
-    }
-
-    /**
-     * @param Field[] $fields
+     * The name of the key to fetch it from the query.
+     * The results of which will be elements of the chart.
      *
-     * @return array
+     * @var string
      */
-    protected function addPrefix(array $fields): array
-    {
-        return array_map(function (Field $field) {
-            return $field-&gt;set('name',
-                $this-&gt;prefix . $field-&gt;get('name')
-            );
-        }, $fields);
-    }
+    protected $target = 'usageTwoFactorAuth';
 }
 </code></pre>
 
-<p>The main task has been solved. Now, the reuse of a class with one set of fields for the address does not make you think and duplicate it.</p>
+<p>The output of the request will be slightly different:</p>
+
+<pre><code class="language-php">public function query(): array
+{
+    $usageTwoFactorAuth = User::countForGroup('uses_two_factor_auth')
+        -&gt;toChart(function (bool $state) {
+            return $state ? 'Enabled' : 'Disabled';
+        });
+
+
+    return [
+        'usageTwoFactorAuth' =&gt; $usageTwoFactorAuth,
+        // ...
+    ]
+}
+</code></pre>
+
+<p>Let's not forget to bring out the layer created:</p>
+
+<pre><code class="language-php">public function layout(): array
+{
+    return [
+        DynamicsOfRegistrations::class,
+        UsageTwoFactorAuth::class
+        // ... other layouts
+    ];
+}
+</code></pre>
+
+<p>Now, going to the user list page, we will also see the ratio of users who have enabled two-factor authentication:</p>
+
+<p><img src="/assets/img/draw-model-charts/t3alibhlbh3ggswv616r.png" alt="UsageTwoFactorAuth" /></p>
+
+<p>That's it! Our minimum example is ready. You can learn more about building charts on the <a href="https://orchid.software/en/docs/layouts/charts">documentation page</a>.</p>
         </div>
 
 
         <div class="pagination">
-                            <a href="https://blog.orchid.software/dive-into-elements-and-forms" title="Older Post: Dive into “Elements and Forms”" class="pagination-item older">
-                    &LeftArrow; Dive into “Elements and Forms”
+                            <a href="https://blog.orchid.software/reusing-layers" title="Older Post: Reusing layers" class="pagination-item older">
+                    &LeftArrow; Reusing layers
                 </a>
             
-                            <a href="https://blog.orchid.software/draw-model-charts" title="Newer Post: Draw model charts"
+                            <a href="https://blog.orchid.software/svg-icons" title="Newer Post: SVG Icons"
                    class="pagination-item newer">
-                    Draw model charts &RightArrow;
+                    SVG Icons &RightArrow;
                 </a>
                     </div>
     </div>

@@ -4,14 +4,14 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="description" content="Reusing layers for Laravel Orchid">
+        <meta name="description" content="Comparing the complexity of the code for different admin panels in laravel">
 
-        <meta property="og:title" content="Reusing layers | Laravel Orchid"/>
+        <meta property="og:title" content="Dive into “Elements and Forms” | Laravel Orchid"/>
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://blog.orchid.software/reusing-layers"/>
-        <meta property="og:description" content="Reusing layers for Laravel Orchid" />
+        <meta property="og:url" content="https://blog.orchid.software/dive-into-elements-and-forms"/>
+        <meta property="og:description" content="Comparing the complexity of the code for different admin panels in laravel" />
 
-        <title>Reusing layers | Laravel Orchid</title>
+        <title>Dive into “Elements and Forms” | Laravel Orchid</title>
 
         <link rel="home" href="https://blog.orchid.software">
         <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
@@ -107,163 +107,237 @@
     <div class="posts-container px-3 mx-auto my-5">
         <div class="post">
             <h1 class="post-title fw-500">
-                Reusing layers
+                Dive into “Elements and Forms”
             </h1>
 
-            <span class="post-date mb-4">Alexandr Chernyaev  •  July 1, 2020</span>
+            <span class="post-date mb-4">Alexandr Chernyaev  •  September 15, 2019</span>
 
             
-            <p>Layouts are easy to reuse when fields are related to the relations of different models. During installation, we have a layer for defining permissions, which is used immediately at the user and roles editing screen. But sometimes you want to apply the same set of fields with different values. Let's consider an example when you need to specify an address.</p>
+            <p>The use of automated “Laravel admin areas” can be summarized as “Forms over data” as the main tool is to provide a user interface for viewing, adding, and modifying data.</p>
 
-<p>Such a set will be both for the client, the customer, and it will appear twice on the same form (for example, in order, delivery and invoice). To solve this situation, you do not need to create and describe almost identical layouts. Instead, let's add logic to one single layer.</p>
+<p>In this case, the form can consist of many different fields for entering data, so how does such an important element work?</p>
 
-<pre><code class="language-php">namespace App\Orchid\Layouts;
+<h2>Field view</h2>
+
+<p>Any field in the Orchid Platform is just a setting above the view that passes data to the template. Let's create a new class to see what it consists of:</p>
+
+<pre><code class="language-php">&lt;?php
+
+declare(strict_types=1);
+
+namespace App\Orchid\Fields;
 
 use Orchid\Screen\Field;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Label;
-use Orchid\Screen\Layouts\Rows;
 
-class AddressLayout extends Rows
+/**
+ * Class MyField
+ */
+class MyField extends Field
 {
     /**
-     * Used to create the title of a group of form elements.
-     *
-     * @var string|null
-     */
-    protected $title;
-
-    /**
-     * Prefix for a field name
-     *
+     * Blade template
+     * 
      * @var string
      */
-    protected $prefix;
+    protected $view = '';
 
     /**
-     * ReusableEditLayout constructor.
+     * Default attributes value.
      *
-     * @param string      $prefix
-     * @param string|null $title
+     * @var array
      */
-    public function __construct(string $prefix, string $title = null)
-    {
-        $this-&gt;prefix = $prefix;
-        $this-&gt;title = $title;
-    }
+    protected $attributes = [];
 
     /**
-     * Views.
+     * Attributes available for a particular tag.
      *
-     * @return Field[]
+     * @var array
      */
-    protected function fields(): array
+    protected $inlineAttributes = [];
+
+    /**
+     * @param string|null $name
+     *
+     * @return self
+     */
+    public static function make(string $name = null): self
     {
-        return [
-            Input::make($this-&gt;prefix . '.address')
-                -&gt;required()
-                -&gt;title('Address')
-                -&gt;placeholder('177A Bleecker Street'),
-        ];
+        return (new static())-&gt;name($name);
     }
 }
 </code></pre>
 
-<p>Now, when used, we will pass the prefix and header values:</p>
+<p>The <code>view</code> property defines the Blade template to which the data will be passed, the default values are listed in <code>attributes</code>, and <code>inlineAttributes</code> defines the keys needed to be specified in HTML format, for example:</p>
 
-<pre><code class="language-php">public function layout(): array
+<pre><code class="language-html">First name: &lt;input type="text" name="name"&gt;&lt;br&gt;
+</code></pre>
+
+<p>In this example, the inline attribute is a type and the name specified directly in the tag. And the <code>make()</code> method is only for quick and convenient initialization since any form that needs to add or change data must have it.
+Let's update just the created class and add a template:</p>
+
+<pre><code class="language-php">// app/Orchid/Fields/MyField.php
+declare(strict_types=1);
+
+namespace App\Orchid\Fields;
+
+use Orchid\Screen\Field;
+
+/**
+ * Class MyField
+ */
+class MyField extends Field
 {
-    return [
-        Layout::columns([
-            new AddressLayout('order.shipping_address', 'Shipping Address'),
-            new AddressLayout('order.invoice_address', 'Invoice Address'),
-        ]),
+    /**
+     * Blade template
+     *
+     * @var string
+     */
+    protected $view = 'myField';
+
+    /**
+     * Default attributes value.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'title' =&gt; 'First name'
     ];
-}
-</code></pre>
-
-<p>But this is also inconvenient. Why? Now in the definition, we will think, do we need to end the prefix with a dot? And also, specify strange names through the concatenation <code>$this-&gt;prefix. '.address'</code>.</p>
-
-<p>Let's fix it! Since the main thing is to return an array of objects, you can modify the fields before returning, as well as take care of the point in the constructor:</p>
-
-<pre><code class="language-php">namespace App\Orchid\Layouts;
-
-use Illuminate\Support\Str;
-use Orchid\Screen\Field;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Layouts\Rows;
-
-class AddressLayout extends Rows
-{
-    /**
-     * Used to create the title of a group of form elements.
-     *
-     * @var string|null
-     */
-    protected $title;
 
     /**
-     * Prefix for a field name
+     * Attributes available for a particular tag.
      *
-     * @var string
+     * @var array
      */
-    protected $prefix;
+    protected $inlineAttributes = [
+        'name',
+        'type'
+    ];
 
     /**
-     * ReusableEditLayout constructor.
+     * @param string|null $name
      *
-     * @param string      $prefix
-     * @param string|null $title
+     * @return self
      */
-    public function __construct(string $prefix, string $title = null)
+    public static function make(string $name = null): self
     {
-        $this-&gt;prefix = Str::finish($prefix, '.');
-        $this-&gt;title = $title;
-    }
-
-    /**
-     * Get the fields elements to be displayed.
-     *
-     * @return Field[]
-     */
-    protected function fields(): array
-    {
-        return $this-&gt;addPrefix([
-            Input::make('address')
-                -&gt;required()
-                -&gt;title('Address')
-                -&gt;placeholder('177A Bleecker Street'),
-        ]);
-    }
-
-    /**
-     * @param Field[] $fields
-     *
-     * @return array
-     */
-    protected function addPrefix(array $fields): array
-    {
-        return array_map(function (Field $field) {
-            return $field-&gt;set('name',
-                $this-&gt;prefix . $field-&gt;get('name')
-            );
-        }, $fields);
+        return (new static())-&gt;name($name);
     }
 }
+// resources/views/myField.blade.php
+{{$title}}: &lt;input @include('platform::partials.fields.attributes', ['attributes' =&gt; $attributes])&gt;&lt;br&gt;
 </code></pre>
 
-<p>The main task has been solved. Now, the reuse of a class with one set of fields for the address does not make you think and duplicate it.</p>
+<p>To try a new field, you need to use the built-in <code>render()</code> method:</p>
+
+<pre><code class="language-php">Route::get('/', function () {
+    $input = MyField::make('name');
+
+    return $input-&gt;render();
+});
+</code></pre>
+
+<p>The browser will return the template just specified. Let's try to add some elements:</p>
+
+<pre><code class="language-php">Route::get('/', function () {
+    $input = MyField::make('name')
+        -&gt;title('How your name?')
+        -&gt;placeholder('Sheldon Cooper')
+        -&gt;value('Alexandr Chernyaev');
+
+    return $input-&gt;render();
+});
+</code></pre>
+
+<p>After we refresh the page, it displays a new title instead of the default one, but neither the placeholder nor the value has been applied. This is because they were not specified in <code>inlineAttributes</code>. Let's fix that:</p>
+
+<pre><code class="language-php">/**
+ * Attributes available for a particular tag.
+ *
+ * @var array
+ */
+protected $inlineAttributes = [
+    'name',
+    'type',
+    'placeholder',
+    'value'
+];
+</code></pre>
+
+<p>After that, each attribute will be drawn in our template.</p>
+
+<h2>But how does the form process the data?</h2>
+
+<p>In normal use, there is no need to render every element and fill it with data. There is a special builder for this - <code>Orchid\Screen\Builder</code></p>
+
+<pre><code class="language-php">Route::get('/', function () {
+
+    $fields[] = MyField::make('name');
+
+    $repository = new Repository([
+        'name' =&gt; 'Alexandr Chernyaev',
+    ]);
+
+    $builder = new Builder($fields, $repository);
+
+    return $builder-&gt;generateForm();
+});
+</code></pre>
+
+<p>Essentially, the builder maps the names from the store to the required form as a value. At the same time, it has the ability to enter into the depth of the object using dot-notation.</p>
+
+<pre><code class="language-php">Route::get('/', function () {
+
+    $fields[] = MyField::make('name.ru');
+
+    $repository = new Repository([
+        'name' =&gt; [
+            'en' =&gt; 'Alexandr Chernyaev',
+            'ru' =&gt; 'Александр Черняев'
+        ],
+    ]);
+
+    $builder = new Builder($fields, $repository);
+
+    return $builder-&gt;generateForm();
+});
+</code></pre>
+
+<p>You can also specify the required language and prefix, for example:</p>
+
+<pre><code class="language-php">Route::get('/', function () {
+
+    $fields[] = MyField::make('name');
+
+    $repository = new Repository([
+        'en' =&gt; [
+            'name' =&gt; 'Alexandr Chernyaev',
+        ],
+        'ru' =&gt; [
+            'name' =&gt; 'Александр Черняев',
+        ]
+    ]);
+
+    $builder = new Builder($fields, $repository);
+    $builder-&gt;setLanguage('en');
+
+    return $builder-&gt;generateForm();
+});
+</code></pre>
+
+<h2>And it's all?</h2>
+
+<p>That's right. This is exactly the approach used in the Orchid admin panel for Laravel when rendering screens and allowing you to automate the construction of forms with data.</p>
         </div>
 
 
         <div class="pagination">
-                            <a href="https://blog.orchid.software/dive-into-elements-and-forms" title="Older Post: Dive into “Elements and Forms”" class="pagination-item older">
-                    &LeftArrow; Dive into “Elements and Forms”
+                            <a href="https://blog.orchid.software/comparison-of-administration-panels" title="Older Post: Comparison of administration panels" class="pagination-item older">
+                    &LeftArrow; Comparison of administration panels
                 </a>
             
-                            <a href="https://blog.orchid.software/draw-model-charts" title="Newer Post: Draw model charts"
+                            <a href="https://blog.orchid.software/reusing-layers" title="Newer Post: Reusing layers"
                    class="pagination-item newer">
-                    Draw model charts &RightArrow;
+                    Reusing layers &RightArrow;
                 </a>
                     </div>
     </div>

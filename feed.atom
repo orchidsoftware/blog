@@ -3,12 +3,207 @@
     <title>Laravel Orchid</title>
     <link href="https://blog.orchid.software/blog" />
     <link type="application/atom+xml" rel="self" href="https://blog.orchid.software/feed.atom" />
-    <updated>2020-10-06T23:47:13+00:00</updated>
+    <updated>2020-10-07T00:27:13+00:00</updated>
     <id>https://blog.orchid.software/feed.atom</id>
     <author>
         <name>Alexandr Chernyaev</name>
     </author>
                 <entry>
+            <id>https://blog.orchid.software/svg-icons</id>
+            <link type="text/html" rel="alternate" href="https://blog.orchid.software/svg-icons" />
+            <title>SVG Icons</title>
+            <published>2020-09-19T00:00:00+00:00</published>
+            <updated>2020-09-19T00:00:00+00:00</updated>
+            <author>
+                <name>Alexandr Chernyaev</name>
+            </author>
+            <summary type="html">In the latest release of the package, I replaced &lt;code&gt;Icon Fonts&lt;/code&gt; in favor of the SVG format, which means that now icons are available in a vector.
+
+Previously, if you needed to display your own (or from the Internet) icon, you could translate it......</summary>
+            <content type="html"><![CDATA[
+                <p>In the latest release of the package, I replaced <code>Icon Fonts</code> in favor of the SVG format, which means that now icons are available in a vector.</p>
+
+<p>Previously, if you needed to display your own (or from the Internet) icon, you could translate it into a font and include a CSS file with a description. Now, this is not needed. It is enough to copy the desired icon to the project.</p>
+
+<p>Let's do it together. Let's say we want to include an icon from the popular Font Awesome. To do this, select a suitable storage directory, for example, create a new <code>icons</code> directory and a <code>fontawesome</code> subdirectory:</p>
+
+<pre><code class="language-bash">resources
+  - css 
+  - icons
+      -- fontawesome 
+  - js
+  - lang
+  - views
+</code></pre>
+
+<p>Load the appropriate icons into the new directory, for example, this <a href="https://github.com/FortAwesome/Font-Awesome/blob/ce084cb3463f15fd6b001eb70622d00a0e43c56c/svgs/solid/address-book.svg">notebook icon</a>. Then we will indicate to the package the directory in which we need to search for our images, for this we will edit the configuration file <code>config/platform.php</code>:</p>
+
+<pre><code class="language-php">'icons' =&gt; [
+    'fa' =&gt; resource_path('icons/fontawesome')
+],
+</code></pre>
+
+<p>All we have done here is declare the prefix by which we will refer to fa and the directory where the files are located.
+To display in the components of the package, you only need to pass the prefix + name, for example, the definition of the icon in the menu will look like this:</p>
+
+<pre><code class="language-php">ItemMenu::label('Example of custom icons')
+    -&gt;icon('fa.address-book')
+    -&gt;url(#);
+</code></pre>
+
+<p>Moreover, if, for some reason, your project does not have <a href="http://orchid.software/">Laravel Orchid</a>, then a separate <a href="https://github.com/orchidsoftware/blade-icons">package has been prepared for the Blade and SVG template engine</a>.</p>
+            ]]></content>
+        </entry>
+            <entry>
+            <id>https://blog.orchid.software/draw-model-charts</id>
+            <link type="text/html" rel="alternate" href="https://blog.orchid.software/draw-model-charts" />
+            <title>Draw model charts</title>
+            <published>2020-08-05T00:00:00+00:00</published>
+            <updated>2020-08-05T00:00:00+00:00</updated>
+            <author>
+                <name>Alexandr Chernyaev</name>
+            </author>
+            <summary type="html">Building charts can be awkward, but since &lt;code&gt;7.15.0&lt;/code&gt;, a trait has been added to Laravel Orchid to generate group and time data.
+To use it, you should add the trait &lt;code&gt;Orchid\Metrics\Chartable&lt;/code&gt; to the model.
+
+Let&#039;s try it in action and......</summary>
+            <content type="html"><![CDATA[
+                <p>Building charts can be awkward, but since <code>7.15.0</code>, a trait has been added to <a href="http://orchid.software/">Laravel Orchid</a> to generate group and time data.
+To use it, you should add the trait <code>Orchid\Metrics\Chartable</code> to the model.</p>
+
+<p>Let's try it in action and form a visual dynamics of user registrations. To do this, let's create a new layer using the command:</p>
+
+<pre><code class="language-php"> php artisan orchid:chart DynamicsOfRegistrations
+</code></pre>
+
+<p>In <code>app/Orchid/Layouts</code> directory, a new class will be created, we will add the name and the target key to it:</p>
+
+<pre><code class="language-php">namespace App\Orchid\Layouts;
+
+use Orchid\Screen\Layouts\Chart;
+
+class DynamicsOfRegistrations extends Chart
+{
+    /**
+     * Add a title to the Chart.
+     *
+     * @var string
+     */
+    protected $title = 'New members';
+
+    /**
+     * Data source.
+     *
+     * The name of the key to fetch it from the query.
+     * The results of which will be elements of the. Wet.
+     *
+     * @var string
+     */
+    protected $target = 'registrations';
+}
+</code></pre>
+
+<p>The standard package comes with a screen displaying all users. Why not use it. Let's add a new query value to the <code>UserListScreen</code>:</p>
+
+<pre><code class="language-php">public function query(): array
+{
+    return [
+        'registrations' =&gt; [
+            User::countByDays()-&gt;toChart('Users'),
+        ],
+        // ... other values
+    ]
+}
+</code></pre>
+
+<p>All that's left is to put a layer on the screen:</p>
+
+<pre><code class="language-php">public function layout(): array
+{
+    return [
+        DynamicsOfRegistrations::class,
+        // ... other layouts
+    ];
+}
+</code></pre>
+
+<p>Now going to the user list page, we will see how many users have registered in the last month:</p>
+
+<p><img src="/assets/img/draw-model-charts/x4w1qcdys4p2qtu9ect8.png" alt="Dynamics Of Registrations" /></p>
+
+<p>That's great. But let's also show the statistics of how many users have enabled two-factor authentication (by the way, here is an <a href="https://dev.to/tabuna/how-to-enable-two-factor-authentication-in-laravel-orchid-2eim">article on how to enable it</a>). For this, we will also create a new layer, but with different values:</p>
+
+<pre><code class="language-php">namespace App\Orchid\Layouts;
+
+use Orchid\Screen\Layouts\Chart;
+
+class UsageTwoFactorAuth extends Chart
+{
+    /**
+     * Add a title to the Chart.
+     *
+     * @var string
+     */
+    protected $title = 'Usage two-factor authentication';
+
+    /**
+     * Available options:
+     * 'bar', 'line',
+     * 'pie', 'percentage'.
+     *
+     * @var string
+     */
+    protected $type = 'pie';
+
+    /**
+     * Data source.
+     *
+     * The name of the key to fetch it from the query.
+     * The results of which will be elements of the chart.
+     *
+     * @var string
+     */
+    protected $target = 'usageTwoFactorAuth';
+}
+</code></pre>
+
+<p>The output of the request will be slightly different:</p>
+
+<pre><code class="language-php">public function query(): array
+{
+    $usageTwoFactorAuth = User::countForGroup('uses_two_factor_auth')
+        -&gt;toChart(function (bool $state) {
+            return $state ? 'Enabled' : 'Disabled';
+        });
+
+
+    return [
+        'usageTwoFactorAuth' =&gt; $usageTwoFactorAuth,
+        // ...
+    ]
+}
+</code></pre>
+
+<p>Let's not forget to bring out the layer created:</p>
+
+<pre><code class="language-php">public function layout(): array
+{
+    return [
+        DynamicsOfRegistrations::class,
+        UsageTwoFactorAuth::class
+        // ... other layouts
+    ];
+}
+</code></pre>
+
+<p>Now, going to the user list page, we will also see the ratio of users who have enabled two-factor authentication:</p>
+
+<p><img src="/assets/img/draw-model-charts/t3alibhlbh3ggswv616r.png" alt="UsageTwoFactorAuth" /></p>
+
+<p>That's it! Our minimum example is ready. You can learn more about building charts on the <a href="https://orchid.software/en/docs/layouts/charts">documentation page</a>.</p>
+            ]]></content>
+        </entry>
+            <entry>
             <id>https://blog.orchid.software/reusing-layers</id>
             <link type="text/html" rel="alternate" href="https://blog.orchid.software/reusing-layers" />
             <title>Reusing layers</title>
@@ -159,6 +354,318 @@ class AddressLayout extends Rows
 </code></pre>
 
 <p>The main task has been solved. Now, the reuse of a class with one set of fields for the address does not make you think and duplicate it.</p>
+            ]]></content>
+        </entry>
+            <entry>
+            <id>https://blog.orchid.software/dive-into-elements-and-forms</id>
+            <link type="text/html" rel="alternate" href="https://blog.orchid.software/dive-into-elements-and-forms" />
+            <title>Dive into “Elements and Forms”</title>
+            <published>2019-09-15T00:00:00+00:00</published>
+            <updated>2019-09-15T00:00:00+00:00</updated>
+            <author>
+                <name>Alexandr Chernyaev</name>
+            </author>
+            <summary type="html">The use of automated “Laravel admin areas” can be summarized as “Forms over data” as the main tool is to provide a user interface for viewing, adding, and modifying data.
+
+In this case, the form can consist of many different fields for entering......</summary>
+            <content type="html"><![CDATA[
+                <p>The use of automated “Laravel admin areas” can be summarized as “Forms over data” as the main tool is to provide a user interface for viewing, adding, and modifying data.</p>
+
+<p>In this case, the form can consist of many different fields for entering data, so how does such an important element work?</p>
+
+<h2>Field view</h2>
+
+<p>Any field in the Orchid Platform is just a setting above the view that passes data to the template. Let's create a new class to see what it consists of:</p>
+
+<pre><code class="language-php">&lt;?php
+
+declare(strict_types=1);
+
+namespace App\Orchid\Fields;
+
+use Orchid\Screen\Field;
+
+/**
+ * Class MyField
+ */
+class MyField extends Field
+{
+    /**
+     * Blade template
+     * 
+     * @var string
+     */
+    protected $view = '';
+
+    /**
+     * Default attributes value.
+     *
+     * @var array
+     */
+    protected $attributes = [];
+
+    /**
+     * Attributes available for a particular tag.
+     *
+     * @var array
+     */
+    protected $inlineAttributes = [];
+
+    /**
+     * @param string|null $name
+     *
+     * @return self
+     */
+    public static function make(string $name = null): self
+    {
+        return (new static())-&gt;name($name);
+    }
+}
+</code></pre>
+
+<p>The <code>view</code> property defines the Blade template to which the data will be passed, the default values are listed in <code>attributes</code>, and <code>inlineAttributes</code> defines the keys needed to be specified in HTML format, for example:</p>
+
+<pre><code class="language-html">First name: &lt;input type="text" name="name"&gt;&lt;br&gt;
+</code></pre>
+
+<p>In this example, the inline attribute is a type and the name specified directly in the tag. And the <code>make()</code> method is only for quick and convenient initialization since any form that needs to add or change data must have it.
+Let's update just the created class and add a template:</p>
+
+<pre><code class="language-php">// app/Orchid/Fields/MyField.php
+declare(strict_types=1);
+
+namespace App\Orchid\Fields;
+
+use Orchid\Screen\Field;
+
+/**
+ * Class MyField
+ */
+class MyField extends Field
+{
+    /**
+     * Blade template
+     *
+     * @var string
+     */
+    protected $view = 'myField';
+
+    /**
+     * Default attributes value.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'title' =&gt; 'First name'
+    ];
+
+    /**
+     * Attributes available for a particular tag.
+     *
+     * @var array
+     */
+    protected $inlineAttributes = [
+        'name',
+        'type'
+    ];
+
+    /**
+     * @param string|null $name
+     *
+     * @return self
+     */
+    public static function make(string $name = null): self
+    {
+        return (new static())-&gt;name($name);
+    }
+}
+// resources/views/myField.blade.php
+{{$title}}: &lt;input @include('platform::partials.fields.attributes', ['attributes' =&gt; $attributes])&gt;&lt;br&gt;
+</code></pre>
+
+<p>To try a new field, you need to use the built-in <code>render()</code> method:</p>
+
+<pre><code class="language-php">Route::get('/', function () {
+    $input = MyField::make('name');
+
+    return $input-&gt;render();
+});
+</code></pre>
+
+<p>The browser will return the template just specified. Let's try to add some elements:</p>
+
+<pre><code class="language-php">Route::get('/', function () {
+    $input = MyField::make('name')
+        -&gt;title('How your name?')
+        -&gt;placeholder('Sheldon Cooper')
+        -&gt;value('Alexandr Chernyaev');
+
+    return $input-&gt;render();
+});
+</code></pre>
+
+<p>After we refresh the page, it displays a new title instead of the default one, but neither the placeholder nor the value has been applied. This is because they were not specified in <code>inlineAttributes</code>. Let's fix that:</p>
+
+<pre><code class="language-php">/**
+ * Attributes available for a particular tag.
+ *
+ * @var array
+ */
+protected $inlineAttributes = [
+    'name',
+    'type',
+    'placeholder',
+    'value'
+];
+</code></pre>
+
+<p>After that, each attribute will be drawn in our template.</p>
+
+<h2>But how does the form process the data?</h2>
+
+<p>In normal use, there is no need to render every element and fill it with data. There is a special builder for this - <code>Orchid\Screen\Builder</code></p>
+
+<pre><code class="language-php">Route::get('/', function () {
+
+    $fields[] = MyField::make('name');
+
+    $repository = new Repository([
+        'name' =&gt; 'Alexandr Chernyaev',
+    ]);
+
+    $builder = new Builder($fields, $repository);
+
+    return $builder-&gt;generateForm();
+});
+</code></pre>
+
+<p>Essentially, the builder maps the names from the store to the required form as a value. At the same time, it has the ability to enter into the depth of the object using dot-notation.</p>
+
+<pre><code class="language-php">Route::get('/', function () {
+
+    $fields[] = MyField::make('name.ru');
+
+    $repository = new Repository([
+        'name' =&gt; [
+            'en' =&gt; 'Alexandr Chernyaev',
+            'ru' =&gt; 'Александр Черняев'
+        ],
+    ]);
+
+    $builder = new Builder($fields, $repository);
+
+    return $builder-&gt;generateForm();
+});
+</code></pre>
+
+<p>You can also specify the required language and prefix, for example:</p>
+
+<pre><code class="language-php">Route::get('/', function () {
+
+    $fields[] = MyField::make('name');
+
+    $repository = new Repository([
+        'en' =&gt; [
+            'name' =&gt; 'Alexandr Chernyaev',
+        ],
+        'ru' =&gt; [
+            'name' =&gt; 'Александр Черняев',
+        ]
+    ]);
+
+    $builder = new Builder($fields, $repository);
+    $builder-&gt;setLanguage('en');
+
+    return $builder-&gt;generateForm();
+});
+</code></pre>
+
+<h2>And it's all?</h2>
+
+<p>That's right. This is exactly the approach used in the Orchid admin panel for Laravel when rendering screens and allowing you to automate the construction of forms with data.</p>
+            ]]></content>
+        </entry>
+            <entry>
+            <id>https://blog.orchid.software/comparison-of-administration-panels</id>
+            <link type="text/html" rel="alternate" href="https://blog.orchid.software/comparison-of-administration-panels" />
+            <title>Comparison of administration panels</title>
+            <published>2019-03-03T00:00:00+00:00</published>
+            <updated>2019-03-03T00:00:00+00:00</updated>
+            <author>
+                <name>Alexandr Chernyaev</name>
+            </author>
+            <summary type="html">In 2017, Taylor Otwell published several articles, not comparing features or convenience, but the code results for various frameworks, where Laravel was the clear favorite.
+
+Average class size comparison
+
+
+  Framework Average Class Size Comparison ... I......</summary>
+            <content type="html"><![CDATA[
+                <p>In 2017, <a href="http://medium.com/@taylorotwell">Taylor Otwell</a> published several articles, not comparing features or convenience, but the code results for various frameworks, where Laravel was the clear favorite.</p>
+
+<p><a href="http://medium.com/@taylorotwell/framework-average-class-size-comparison-63722a8ed9cf">Average class size comparison</a></p>
+
+<blockquote>
+  <p>Framework Average Class Size Comparison ... I published some average method complexity statistics yesterday. One rebuttal to those statistics was that Laravel's ...</p>
+</blockquote>
+
+<p><a href="http://medium.com/@taylorotwell/measuring-code-complexity-64356da605f9">and code complexity comparison</a></p>
+
+<blockquote>
+  <p>Framework Code Complexity Comparison ... Last week, as I was refactoring and cleaning Laravel for the 5.4 release, Graham Campbell showed me some code complexity ...</p>
+</blockquote>
+
+<p>The measurements were taken using the <a href="https://github.com/sebastianbergmann/phploc">phploc</a> tool. I think it would be a good idea to do the same analysis for the administration packages. <strong>Less is better.</strong></p>
+
+<p><strong>Backpack:</strong></p>
+
+<ul>
+<li>17 834 lines</li>
+<li>23 medium long,</li>
+<li>9.51 average class difficulty</li>
+</ul>
+
+<p><strong>Nova:</strong></p>
+
+<ul>
+<li>19 701 lines</li>
+<li>10 medium length</li>
+<li>3.26 average class difficulty</li>
+</ul>
+
+<p><strong>SleepingOwl:</strong></p>
+
+<ul>
+<li>27 256 lines</li>
+<li>16 medium long</li>
+<li>4.81 average class difficulty</li>
+</ul>
+
+<p><strong>Orchid:</strong></p>
+
+<ul>
+<li>12,753 lines</li>
+<li>10 medium length</li>
+<li>2.68 average class difficulty</li>
+</ul>
+
+<p><strong>Voyager:</strong></p>
+
+<ul>
+<li>10,744 lines</li>
+<li>11 medium long</li>
+<li>4.59 average class difficulty</li>
+</ul>
+
+<p><strong>Z-song/laravel-admin:</strong></p>
+
+<ul>
+<li>26,292 lines</li>
+<li>22 medium length</li>
+<li>6.40 average class difficulty</li>
+</ul>
+
+<p>Measurements were carried out in the <code>src</code> directory, only for files with the <code>.php</code> extension, the latest versions of packages as of March 3, 2019, were used.</p>
             ]]></content>
         </entry>
     </feed>
