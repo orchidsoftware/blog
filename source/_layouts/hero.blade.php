@@ -11,7 +11,7 @@
       <h1 class="f2">Laravel Orchid Blog</h1>
     </a>
     <p class="f5">
-      News and announcements for all things <a href="/" title="Visit the Laravel Orchid docs">Laravel Orchid</a>, including related projects.
+      News and announcements for all things <a href="https://orchid.software/" title="Visit the Laravel Orchid docs">Laravel Orchid</a>, including related projects.
     </p>
   </div>
 </div>
