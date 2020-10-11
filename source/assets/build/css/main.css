@@ -10374,7 +10374,7 @@ tbody tr:nth-child(odd) th {
   width: 100%;
   -o-object-fit: cover;
      object-fit: cover;
-  max-height: 300px;
+  max-height: 400px;
 }
 
 .pagination {
