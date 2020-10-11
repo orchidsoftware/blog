@@ -4,14 +4,14 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="description" content="We use our own sets of icons in the admin panel">
+        <meta name="description" content="This is all that you see on the work area of an open web page.">
 
-        <meta property="og:title" content="SVG Icons | Laravel Orchid"/>
+        <meta property="og:title" content="What are a Screen and its responsibility? | Laravel Orchid"/>
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://blog.orchid.software/svg-icons"/>
-        <meta property="og:description" content="We use our own sets of icons in the admin panel" />
+        <meta property="og:url" content="https://blog.orchid.software/what-are-a-screen-and-its-responsibility"/>
+        <meta property="og:description" content="This is all that you see on the work area of an open web page." />
 
-        <title>SVG Icons | Laravel Orchid</title>
+        <title>What are a Screen and its responsibility? | Laravel Orchid</title>
 
         <link rel="home" href="https://blog.orchid.software">
         <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
@@ -107,56 +107,132 @@
     <div class="posts-container px-3 mx-auto my-5">
         <div class="post">
             <h1 class="post-title fw-500">
-                SVG Icons
+                What are a Screen and its responsibility?
             </h1>
 
-            <span class="post-date mb-4">Alexandr Chernyaev  •  September 19, 2020</span>
+            <span class="post-date mb-4">Alexandr Chernyaev  •  October 11, 2020</span>
 
-                            <img src="/assets/img/svg-icons/cc6rghokf83xr80dh899.png" class="cover-image">
+                            <img src="/assets/img/what-are-a-screen-and-its-responsibility/diego-gonzalez--I8lDurtfAo-unsplash.jpg" class="cover-image">
             
-            <p>In the latest release of the package, I replaced <code>Icon Fonts</code> in favor of the SVG format, which means that now icons are available in a vector.</p>
+            <p>The screen is a rather unusual term for web developers. It means a unique set of components that a user can see on a page.</p>
 
-<p>Previously, if you needed to display your own (or from the Internet) icon, you could translate it into a font and include a CSS file with a description. Now, this is not needed. It is enough to copy the desired icon to the project.</p>
+<p>For example, when building a simple blog, we will have only two unique pages. Home and page to display text. In fact, we have just two screens. There can be as many pages in our blog as you want. But there are only two truly unique screens.</p>
 
-<p>Let's do it together. Let's say we want to include an icon from the popular Font Awesome. To do this, select a suitable storage directory, for example, create a new <code>icons</code> directory and a <code>fontawesome</code> subdirectory:</p>
+<p>Let's continue the blog analogy. Each of our pages has a header, menu, footer. And all changes to the input of the transfer and views take place in the workspace. In the Laravel Orchid admin panel, the <code>Screen</code> class is intended to control this workspace.</p>
 
-<pre><code class="language-bash">resources
-  - css 
-  - icons
-      -- fontawesome 
-  - js
-  - lang
-  - views
+<p>Now that we've clarified a bit what the screen is, we can go deeper. A good question may arise here: The workspace of an application usually contains a lot of logic, somewhere you need to take values from the database, somewhere to display them in a table. Is it possible to unite this? Don't get the noodle code?</p>
+
+<p>In fact, the responsibility is divided. Let's try to understand how popular single-page applications work. Some script accesses the service <code>API</code> for data and receives a <code>JSON</code> response where all the information is contained to display the content. Something like this:</p>
+
+<pre><code class="language-json">[
+  {
+    "id": 1,
+    "title": "sunt aut facere repellat provident occaecati...",
+    "body": "quia et suscipit suscipit recusandae ..."
+  },
+  {
+    "id": 2,
+    "title": "qui est esse",
+    "body": "est rerum tempore vitae sequi sin..."
+  },
+  {
+    "id": 3,
+    "title": "ea molestias quasi exercitationem repellat...",
+    "body": "et iusto sed quo iure voluptatem occaecati omnis..."
+  },
+  ...
 </code></pre>
 
-<p>Load the appropriate icons into the new directory, for example, this <a href="https://github.com/FortAwesome/Font-Awesome/blob/ce084cb3463f15fd6b001eb70622d00a0e43c56c/svgs/solid/address-book.svg">notebook icon</a>. Then we will indicate to the package the directory in which we need to search for our images, for this we will edit the configuration file <code>config/platform.php</code>:</p>
+<p>In fact, this <code>API</code> prepares all the necessary information that might be required to display a blog post. By the same endpoint principle, Orchid screens have a <code>query</code> method to prepare all the information.</p>
 
-<pre><code class="language-php">'icons' =&gt; [
-    'fa' =&gt; resource_path('icons/fontawesome')
-],
+<pre><code class="language-php">/**
+ * Query data
+ *
+ * @return array
+ */
+public function query(): array
+{
+  return [
+    'posts' =&gt; [
+      new Repository([
+        "id"    =&gt; 1,
+        "title" =&gt; "sunt aut facere repellat provident occaecati...",
+        "body"  =&gt; "quia et suscipit suscipit recusandae ...",
+      ]),
+      new Repository([
+        "id"    =&gt; 2,
+        "title" =&gt; "qui est esse",
+        "body"  =&gt; "est rerum tempore vitae sequi sin...",
+      ]),
+      new Repository([
+        "id"    =&gt; 3,
+        "title" =&gt; "ea molestias quasi exercitationem repellat...",
+        "body"  =&gt; "et iusto sed quo iure voluptatem occaecati omnis...",
+      ]),
+    ]
+  ];
+}
 </code></pre>
 
-<p>All we have done here is declare the prefix by which we will refer to fa and the directory where the files are located.
-To display in the components of the package, you only need to pass the prefix + name, for example, the definition of the icon in the menu will look like this:</p>
+<p>After receiving <code>JSON</code> in single-page apps start to render this,
+for example, using <code>front-end</code> frameworks, create some templates.</p>
 
-<pre><code class="language-php">ItemMenu::label('Example of custom icons')
-    -&gt;icon('fa.address-book')
-    -&gt;url(#);
+<p>The same templates we have in Laravel Orchid screens expect you to pass them in the layouts method. For example, let's make a table (<code>php artisan orchid: table ExampleTable</code>):</p>
+
+<pre><code class="language-php">use Orchid\Screen\TD;
+use Orchid\Screen\Layouts\Table;
+
+class BlogListLayout extends Table
+{
+  /**
+   * Data source.
+   *
+   * @var string
+   */
+  protected $target = 'posts';
+
+  /**
+   * @return TD[]
+   */
+  protected function columns() : array
+  {
+    return [
+        TD::set('id'),
+        TD::set('title'),
+        TD::set('body'),
+    ];
+  }
+}
 </code></pre>
 
-<p>Moreover, if, for some reason, your project does not have <a href="http://orchid.software/">Laravel Orchid</a>, then a separate <a href="https://github.com/orchidsoftware/blade-icons">package has been prepared for the Blade and SVG template engine</a>.</p>
+<p>In <code>target</code>, we indicated which prepared value (from <code>query</code>) needs to be passed to our template and declared the columns in our table.</p>
+
+<p>Now all that remains is to indicate the created template in the screen class:</p>
+
+<pre><code class="language-php">/**
+ * Views
+ *
+ * @return array
+ */
+public function layout() : array
+{
+    return [
+        BlogListLayout::class
+    ];
+}
+</code></pre>
+
+<p>In fact, the screen united but did not take on unnecessary responsibility.
+If you follow which, you will not have code noodles. At the same time, just by looking at the screen code, you will already know what data and where it receives from and what templates will be displayed.</p>
         </div>
 
 
         <div class="pagination">
-                            <a href="https://blog.orchid.software/draw-model-charts" title="Older Post: Draw model charts" class="pagination-item older">
-                    &LeftArrow; Draw model charts
+                            <a href="https://blog.orchid.software/svg-icons" title="Older Post: SVG Icons" class="pagination-item older">
+                    &LeftArrow; SVG Icons
                 </a>
             
-                            <a href="https://blog.orchid.software/what-are-a-screen-and-its-responsibility" title="Newer Post: What are a Screen and its responsibility?"
-                   class="pagination-item newer">
-                    What are a Screen and its responsibility? &RightArrow;
-                </a>
+                            <span class="pagination-item newer">Newer</span>
                     </div>
     </div>
 </div>

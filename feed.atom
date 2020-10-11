@@ -3,12 +3,137 @@
     <title>Laravel Orchid</title>
     <link href="https://blog.orchid.software/blog" />
     <link type="application/atom+xml" rel="self" href="https://blog.orchid.software/feed.atom" />
-    <updated>2020-10-07T00:43:00+00:00</updated>
+    <updated>2020-10-11T18:58:53+00:00</updated>
     <id>https://blog.orchid.software/feed.atom</id>
     <author>
         <name>Alexandr Chernyaev</name>
     </author>
                 <entry>
+            <id>https://blog.orchid.software/what-are-a-screen-and-its-responsibility</id>
+            <link type="text/html" rel="alternate" href="https://blog.orchid.software/what-are-a-screen-and-its-responsibility" />
+            <title>What are a Screen and its responsibility?</title>
+            <published>2020-10-11T00:00:00+00:00</published>
+            <updated>2020-10-11T00:00:00+00:00</updated>
+            <author>
+                <name>Alexandr Chernyaev</name>
+            </author>
+            <summary type="html">The screen is a rather unusual term for web developers. It means a unique set of components that a user can see on a page.
+
+For example, when building a simple blog, we will have only two unique pages. Home and page to display text. In fact, we have just......</summary>
+            <content type="html"><![CDATA[
+                <p>The screen is a rather unusual term for web developers. It means a unique set of components that a user can see on a page.</p>
+
+<p>For example, when building a simple blog, we will have only two unique pages. Home and page to display text. In fact, we have just two screens. There can be as many pages in our blog as you want. But there are only two truly unique screens.</p>
+
+<p>Let's continue the blog analogy. Each of our pages has a header, menu, footer. And all changes to the input of the transfer and views take place in the workspace. In the Laravel Orchid admin panel, the <code>Screen</code> class is intended to control this workspace.</p>
+
+<p>Now that we've clarified a bit what the screen is, we can go deeper. A good question may arise here: The workspace of an application usually contains a lot of logic, somewhere you need to take values from the database, somewhere to display them in a table. Is it possible to unite this? Don't get the noodle code?</p>
+
+<p>In fact, the responsibility is divided. Let's try to understand how popular single-page applications work. Some script accesses the service <code>API</code> for data and receives a <code>JSON</code> response where all the information is contained to display the content. Something like this:</p>
+
+<pre><code class="language-json">[
+  {
+    "id": 1,
+    "title": "sunt aut facere repellat provident occaecati...",
+    "body": "quia et suscipit suscipit recusandae ..."
+  },
+  {
+    "id": 2,
+    "title": "qui est esse",
+    "body": "est rerum tempore vitae sequi sin..."
+  },
+  {
+    "id": 3,
+    "title": "ea molestias quasi exercitationem repellat...",
+    "body": "et iusto sed quo iure voluptatem occaecati omnis..."
+  },
+  ...
+</code></pre>
+
+<p>In fact, this <code>API</code> prepares all the necessary information that might be required to display a blog post. By the same endpoint principle, Orchid screens have a <code>query</code> method to prepare all the information.</p>
+
+<pre><code class="language-php">/**
+ * Query data
+ *
+ * @return array
+ */
+public function query(): array
+{
+  return [
+    'posts' =&gt; [
+      new Repository([
+        "id"    =&gt; 1,
+        "title" =&gt; "sunt aut facere repellat provident occaecati...",
+        "body"  =&gt; "quia et suscipit suscipit recusandae ...",
+      ]),
+      new Repository([
+        "id"    =&gt; 2,
+        "title" =&gt; "qui est esse",
+        "body"  =&gt; "est rerum tempore vitae sequi sin...",
+      ]),
+      new Repository([
+        "id"    =&gt; 3,
+        "title" =&gt; "ea molestias quasi exercitationem repellat...",
+        "body"  =&gt; "et iusto sed quo iure voluptatem occaecati omnis...",
+      ]),
+    ]
+  ];
+}
+</code></pre>
+
+<p>After receiving <code>JSON</code> in single-page apps start to render this,
+for example, using <code>front-end</code> frameworks, create some templates.</p>
+
+<p>The same templates we have in Laravel Orchid screens expect you to pass them in the layouts method. For example, let's make a table (<code>php artisan orchid: table ExampleTable</code>):</p>
+
+<pre><code class="language-php">use Orchid\Screen\TD;
+use Orchid\Screen\Layouts\Table;
+
+class BlogListLayout extends Table
+{
+  /**
+   * Data source.
+   *
+   * @var string
+   */
+  protected $target = 'posts';
+
+  /**
+   * @return TD[]
+   */
+  protected function columns() : array
+  {
+    return [
+        TD::set('id'),
+        TD::set('title'),
+        TD::set('body'),
+    ];
+  }
+}
+</code></pre>
+
+<p>In <code>target</code>, we indicated which prepared value (from <code>query</code>) needs to be passed to our template and declared the columns in our table.</p>
+
+<p>Now all that remains is to indicate the created template in the screen class:</p>
+
+<pre><code class="language-php">/**
+ * Views
+ *
+ * @return array
+ */
+public function layout() : array
+{
+    return [
+        BlogListLayout::class
+    ];
+}
+</code></pre>
+
+<p>In fact, the screen united but did not take on unnecessary responsibility.
+If you follow which, you will not have code noodles. At the same time, just by looking at the screen code, you will already know what data and where it receives from and what templates will be displayed.</p>
+            ]]></content>
+        </entry>
+            <entry>
             <id>https://blog.orchid.software/svg-icons</id>
             <link type="text/html" rel="alternate" href="https://blog.orchid.software/svg-icons" />
             <title>SVG Icons</title>
