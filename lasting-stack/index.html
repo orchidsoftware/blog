@@ -4,14 +4,14 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="description" content="Reusing layers for Laravel Orchid">
+        <meta name="description" content="A solid base allows it to exist for a long time without drastic changes.">
 
-        <meta property="og:title" content="Reusing layers | Laravel Orchid"/>
+        <meta property="og:title" content="What stack does Orchid use? | Laravel Orchid"/>
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://blog.orchid.software/reusing-layers"/>
-        <meta property="og:description" content="Reusing layers for Laravel Orchid" />
+        <meta property="og:url" content="https://blog.orchid.software/lasting-stack"/>
+        <meta property="og:description" content="A solid base allows it to exist for a long time without drastic changes." />
 
-        <title>Reusing layers | Laravel Orchid</title>
+        <title>What stack does Orchid use? | Laravel Orchid</title>
 
         <link rel="home" href="https://blog.orchid.software">
         <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
@@ -107,164 +107,78 @@
     <div class="posts-container px-3 mx-auto my-5">
         <div class="post">
             <h1 class="post-title fw-500">
-                Reusing layers
+                What stack does Orchid use?
             </h1>
 
-            <span class="post-date mb-4">Alexandr Chernyaev  •  July 1, 2020</span>
+            <span class="post-date mb-4">Alexandr Chernyaev  •  October 12, 2020</span>
 
             
-            <p>Layouts are easy to reuse when fields are related to the relations of different models. During installation, we have a layer for defining permissions, which is used immediately at the user and roles editing screen. But sometimes you want to apply the same set of fields with different values. Let's consider an example when you need to specify an address.</p>
+            <p>There are a lot of different stacks in trend right now for building an application. Every year or two, a new product appears that causes a lot of hype on the net and people to rush to rewrite their projects.</p>
 
-<p>Such a set will be both for the client, the customer, and it will appear twice on the same form (for example, in order, delivery and invoice). To solve this situation, you do not need to create and describe almost identical layouts. Instead, let's add logic to one single layer.</p>
+<p>There are a lot of different stacks in trend right now for building an application. Every year or two, a new product appears that causes a lot of hype on the net and people to rush to rewrite their projects.</p>
 
-<pre><code class="language-php">namespace App\Orchid\Layouts;
+<p>But the laravel Orchid administration panel is in no hurry to make changes.
+Does not participate in page building:</p>
 
-use Orchid\Screen\Field;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Label;
-use Orchid\Screen\Layouts\Rows;
+<ul>
+<li>React</li>
+<li>Vue</li>
+<li>Tailwind css</li>
+<li>Alpine.js</li>
+<li>Livewire</li>
+</ul>
 
-class AddressLayout extends Rows
-{
-    /**
-     * Used to create the title of a group of form elements.
-     *
-     * @var string|null
-     */
-    protected $title;
+<p>It may seem that this is some old product. Indeed, the first public version was published in 2016. One of the factors that we have been around for so long is the principle of "don't run after the crowd."</p>
 
-    /**
-     * Prefix for a field name
-     *
-     * @var string
-     */
-    protected $prefix;
+<h4>There is such an interesting but controversial term as "The Hype Cycle".</h4>
 
-    /**
-     * ReusableEditLayout constructor.
-     *
-     * @param string      $prefix
-     * @param string|null $title
-     */
-    public function __construct(string $prefix, string $title = null)
-    {
-        $this-&gt;prefix = $prefix;
-        $this-&gt;title = $title;
-    }
+<p><img src="/assets/img/lasting-stack/gartner_hype_cycle.svg" alt="noize" /></p>
 
-    /**
-     * Views.
-     *
-     * @return Field[]
-     */
-    protected function fields(): array
-    {
-        return [
-            Input::make($this-&gt;prefix . '.address')
-                -&gt;required()
-                -&gt;title('Address')
-                -&gt;placeholder('177A Bleecker Street'),
-        ];
-    }
-}
-</code></pre>
+<ul>
+<li>First, all blogs and famous people in the community talk about new technology.</li>
+<li>Users start to build new projects with it or try to build into existing ones.</li>
+<li>Interest on the part of public figures is fading away. Developers are beginning to face problems that can only be solved by major releases that are dragging on.</li>
+<li>People understand the strong and weak side. Technology begins to be applied in a narrower range of tasks</li>
+<li>The technology occupies a niche market and is growing slowly.</li>
+</ul>
 
-<p>Now, when used, we will pass the prefix and header values:</p>
+<p>Does this sound familiar to you? I've seen people post in <code>React</code>, but after tweeting:</p>
 
-<pre><code class="language-php">public function layout(): array
-{
-    return [
-        Layout::columns([
-            new AddressLayout('order.shipping_address', 'Shipping Address'),
-            new AddressLayout('order.invoice_address', 'Invoice Address'),
-        ]),
-    ];
-}
-</code></pre>
+<p><img src="/assets/img/lasting-stack/twit.png" alt="noize" /></p>
 
-<p>But this is also inconvenient. Why? Now in the definition, we will think, do we need to end the prefix with a dot? And also, specify strange names through the concatenation <code>$this-&gt;prefix. '.address'</code>.</p>
+<p>Let's try <code>Vue</code> on real projects, then abandon it in favor
+<code>Alpine.js</code> etc. This is not really a need. This is a trend!</p>
 
-<p>Let's fix it! Since the main thing is to return an array of objects, you can modify the fields before returning, as well as take care of the point in the constructor:</p>
+<h4>Build a product during a trend blizzard</h4>
 
-<pre><code class="language-php">namespace App\Orchid\Layouts;
+<p>When I released the 0.x version, they used <code>jQuery</code>, and the most popular request was the conversion to <code>Vue</code>. Then I fell for this bait and began to rewrite the ready-made working code using the rapidly gaining popularity framework. After a few sleepless nights, the work was ready.
+The public reaction was, "Oh cool! Another technology was rewritten to Vue," and that's it!
+From this, there were no more users, since the offered functions have not changed. There are also no more change requests.</p>
 
-use Illuminate\Support\Str;
-use Orchid\Screen\Field;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Layouts\Rows;
+<p><img src="/assets/img/lasting-stack/backend-vs-frontend.png" alt="backend-vs-frontend" /></p>
 
-class AddressLayout extends Rows
-{
-    /**
-     * Used to create the title of a group of form elements.
-     *
-     * @var string|null
-     */
-    protected $title;
+<p>In place of this, I received modern technology that took even more time to maintain it. Since first I had to do the work on <code>laravel</code>, and then continue<code>vue</code>.</p>
 
-    /**
-     * Prefix for a field name
-     *
-     * @var string
-     */
-    protected $prefix;
+<p>This separation works great for a full-time job. One team worked on <code>PHP</code>, and the other on<code>JS</code> But this is an open and free product, where enthusiasts make changes in their free time. Now, for minor edits, more knowledge and skills were required from a person.</p>
 
-    /**
-     * ReusableEditLayout constructor.
-     *
-     * @param string      $prefix
-     * @param string|null $title
-     */
-    public function __construct(string $prefix, string $title = null)
-    {
-        $this-&gt;prefix = Str::finish($prefix, '.');
-        $this-&gt;title = $title;
-    }
+<p>It was obvious that this was not very suitable for us at such a slow pace of work. Therefore, we drew attention to more classic <code>JS</code> frameworks, the purpose of which is not to convert <code>JSON</code> into <code>DOM</code> elements. To supplement an existing page, this choice was <code>Stimulus</code> from the <code>Ruby on rails</code> and<code>Basecamp</code> teams. At the same time, retaining the advantage of fast page loads. This allowed us to abandon the use of <code>API</code> and use the familiar <code>Blade</code>, introducing dynamic behavior only slightly.</p>
 
-    /**
-     * Get the fields elements to be displayed.
-     *
-     * @return Field[]
-     */
-    protected function fields(): array
-    {
-        return $this-&gt;addPrefix([
-            Input::make('address')
-                -&gt;required()
-                -&gt;title('Address')
-                -&gt;placeholder('177A Bleecker Street'),
-        ]);
-    }
+<p>In 2020, again, faced with questions, but let's change everything to <code>Livewire</code>, and now I demand clear justifications of what advantages we will get. Over the years of development, I tried many competitors, saw how they were written about on <code>laravel-news.com</code>, discussed <code>twitter</code>, etc.</p>
 
-    /**
-     * @param Field[] $fields
-     *
-     * @return array
-     */
-    protected function addPrefix(array $fields): array
-    {
-        return array_map(function (Field $field) {
-            return $field-&gt;set('name',
-                $this-&gt;prefix . $field-&gt;get('name')
-            );
-        }, $fields);
-    }
-}
-</code></pre>
+<p>But most of them did not last even a year. Following ever-changing trends, using inappropriate technologies, and fatigued developers were the main factors behind stopping development. Of course, there are exceptions in the form of the official <code>Nova</code> package, but at least two full-time developers working on it.</p>
 
-<p>The main task has been solved. Now, the reuse of a class with one set of fields for the address does not make you think and duplicate it.</p>
+<p>I'm sure there will be many more coming out soon.
+Administration panels on TALL stack. But before using them,
+think that they may not exist for a year. This solves the same problems as before. After all, what's the difference what is used as a CSS solution in the <code>Bootstrap</code> or <code>Bulma</code> admin area if you don't need to know them in order to use them.</p>
         </div>
 
 
         <div class="pagination">
-                            <a href="https://blog.orchid.software/dive-into-elements-and-forms" title="Older Post: Dive into “Elements and Forms”" class="pagination-item older">
-                    &LeftArrow; Dive into “Elements and Forms”
+                            <a href="https://blog.orchid.software/what-are-a-screen-and-its-responsibility" title="Older Post: What are a Screen and its responsibility?" class="pagination-item older">
+                    &LeftArrow; What are a Screen and its responsibility?
                 </a>
             
-                            <a href="https://blog.orchid.software/draw-model-charts" title="Newer Post: Draw model charts"
-                   class="pagination-item newer">
-                    Draw model charts &RightArrow;
-                </a>
+                            <span class="pagination-item newer">Newer</span>
                     </div>
     </div>
 </div>

@@ -3,12 +3,84 @@
     <title>Laravel Orchid</title>
     <link href="https://blog.orchid.software/blog" />
     <link type="application/atom+xml" rel="self" href="https://blog.orchid.software/feed.atom" />
-    <updated>2020-10-11T18:58:53+00:00</updated>
+    <updated>2020-10-12T00:26:21+00:00</updated>
     <id>https://blog.orchid.software/feed.atom</id>
     <author>
         <name>Alexandr Chernyaev</name>
     </author>
                 <entry>
+            <id>https://blog.orchid.software/lasting-stack</id>
+            <link type="text/html" rel="alternate" href="https://blog.orchid.software/lasting-stack" />
+            <title>What stack does Orchid use?</title>
+            <published>2020-10-12T00:00:00+00:00</published>
+            <updated>2020-10-12T00:00:00+00:00</updated>
+            <author>
+                <name>Alexandr Chernyaev</name>
+            </author>
+            <summary type="html">There are a lot of different stacks in trend right now for building an application. Every year or two, a new product appears that causes a lot of hype on the net and people to rush to rewrite their projects.
+
+There are a lot of different stacks in trend......</summary>
+            <content type="html"><![CDATA[
+                <p>There are a lot of different stacks in trend right now for building an application. Every year or two, a new product appears that causes a lot of hype on the net and people to rush to rewrite their projects.</p>
+
+<p>There are a lot of different stacks in trend right now for building an application. Every year or two, a new product appears that causes a lot of hype on the net and people to rush to rewrite their projects.</p>
+
+<p>But the laravel Orchid administration panel is in no hurry to make changes.
+Does not participate in page building:</p>
+
+<ul>
+<li>React</li>
+<li>Vue</li>
+<li>Tailwind css</li>
+<li>Alpine.js</li>
+<li>Livewire</li>
+</ul>
+
+<p>It may seem that this is some old product. Indeed, the first public version was published in 2016. One of the factors that we have been around for so long is the principle of "don't run after the crowd."</p>
+
+<h4>There is such an interesting but controversial term as "The Hype Cycle".</h4>
+
+<p><img src="/assets/img/lasting-stack/gartner_hype_cycle.svg" alt="noize" /></p>
+
+<ul>
+<li>First, all blogs and famous people in the community talk about new technology.</li>
+<li>Users start to build new projects with it or try to build into existing ones.</li>
+<li>Interest on the part of public figures is fading away. Developers are beginning to face problems that can only be solved by major releases that are dragging on.</li>
+<li>People understand the strong and weak side. Technology begins to be applied in a narrower range of tasks</li>
+<li>The technology occupies a niche market and is growing slowly.</li>
+</ul>
+
+<p>Does this sound familiar to you? I've seen people post in <code>React</code>, but after tweeting:</p>
+
+<p><img src="/assets/img/lasting-stack/twit.png" alt="noize" /></p>
+
+<p>Let's try <code>Vue</code> on real projects, then abandon it in favor
+<code>Alpine.js</code> etc. This is not really a need. This is a trend!</p>
+
+<h4>Build a product during a trend blizzard</h4>
+
+<p>When I released the 0.x version, they used <code>jQuery</code>, and the most popular request was the conversion to <code>Vue</code>. Then I fell for this bait and began to rewrite the ready-made working code using the rapidly gaining popularity framework. After a few sleepless nights, the work was ready.
+The public reaction was, "Oh cool! Another technology was rewritten to Vue," and that's it!
+From this, there were no more users, since the offered functions have not changed. There are also no more change requests.</p>
+
+<p><img src="/assets/img/lasting-stack/backend-vs-frontend.png" alt="backend-vs-frontend" /></p>
+
+<p>In place of this, I received modern technology that took even more time to maintain it. Since first I had to do the work on <code>laravel</code>, and then continue<code>vue</code>.</p>
+
+<p>This separation works great for a full-time job. One team worked on <code>PHP</code>, and the other on<code>JS</code> But this is an open and free product, where enthusiasts make changes in their free time. Now, for minor edits, more knowledge and skills were required from a person.</p>
+
+<p>It was obvious that this was not very suitable for us at such a slow pace of work. Therefore, we drew attention to more classic <code>JS</code> frameworks, the purpose of which is not to convert <code>JSON</code> into <code>DOM</code> elements. To supplement an existing page, this choice was <code>Stimulus</code> from the <code>Ruby on rails</code> and<code>Basecamp</code> teams. At the same time, retaining the advantage of fast page loads. This allowed us to abandon the use of <code>API</code> and use the familiar <code>Blade</code>, introducing dynamic behavior only slightly.</p>
+
+<p>In 2020, again, faced with questions, but let's change everything to <code>Livewire</code>, and now I demand clear justifications of what advantages we will get. Over the years of development, I tried many competitors, saw how they were written about on <code>laravel-news.com</code>, discussed <code>twitter</code>, etc.</p>
+
+<p>But most of them did not last even a year. Following ever-changing trends, using inappropriate technologies, and fatigued developers were the main factors behind stopping development. Of course, there are exceptions in the form of the official <code>Nova</code> package, but at least two full-time developers working on it.</p>
+
+<p>I'm sure there will be many more coming out soon.
+Administration panels on TALL stack. But before using them,
+think that they may not exist for a year. This solves the same problems as before. After all, what's the difference what is used as a CSS solution in the <code>Bootstrap</code> or <code>Bulma</code> admin area if you don't need to know them in order to use them.</p>
+            ]]></content>
+        </entry>
+            <entry>
             <id>https://blog.orchid.software/what-are-a-screen-and-its-responsibility</id>
             <link type="text/html" rel="alternate" href="https://blog.orchid.software/what-are-a-screen-and-its-responsibility" />
             <title>What are a Screen and its responsibility?</title>
