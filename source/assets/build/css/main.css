@@ -10270,7 +10270,7 @@ blockquote p:last-child {
 img {
   display: block;
   max-width: 100%;
-  margin: 0 0 1rem;
+  margin: auto auto 1rem;
   border-radius: 5px;
 }
 
@@ -10328,8 +10328,9 @@ tbody tr:nth-child(odd) th {
   word-break: break-word;
 }
 
-.post h2, .post h3 {
+.post h2, .post h3, .post h4, .post h5 {
   margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 .related {
