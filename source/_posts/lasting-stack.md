@@ -8,8 +8,6 @@ description: A solid base allows it to exist for a long time without drastic cha
 
 There are a lot of different stacks in trend right now for building an application. Every year or two, a new product appears that causes a lot of hype on the net and people to rush to rewrite their projects.
 
-There are a lot of different stacks in trend right now for building an application. Every year or two, a new product appears that causes a lot of hype on the net and people to rush to rewrite their projects.
-
 But the laravel Orchid administration panel is in no hurry to make changes.
 Does not participate in page building:
 
