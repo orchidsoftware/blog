@@ -4,16 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="description" content="News and announcements for all things Laravel Orchid, including related projects.">
+        <meta name="description" content="New package to create CRUD based on Laravel Orchid">
 
-        <meta property="og:title" content="Blog | Laravel Orchid"/>
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://blog.orchid.software/"/>
-        <meta property="og:description" content="News and announcements for all things Laravel Orchid, including related projects." />
-        <meta property="og:image" content="https://blog.orchid.software/assets/img/preview.jpeg" />
+        <meta property="og:title" content="CRUD interface for your Eloquent models | Laravel Orchid"/>
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://blog.orchid.software/crud-interface-for-your-eloquent-models"/>
+        <meta property="og:description" content="New package to create CRUD based on Laravel Orchid" />
+        <meta property="og:image" content="https://blog.orchid.software/assets/img/crud-interface-for-your-eloquent-models/box.jpg" />
 
 
-        <title>Blog | Laravel Orchid</title>
+        <title>CRUD interface for your Eloquent models | Laravel Orchid</title>
 
         <link rel="home" href="https://blog.orchid.software">
         <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
@@ -106,81 +106,123 @@
 
 <div class="container">
     
+    <div class="posts-container px-3 mx-auto my-5">
+        <div class="post">
+            <h1 class="post-title fw-500">
+                CRUD interface for your Eloquent models
+            </h1>
 
-    <div class="posts-container mx-auto px-3 my-5">
-        <div class="posts">
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/crud-interface-for-your-eloquent-models">
-                            CRUD interface for your Eloquent models
-                        </a>
-                    </h1>
+            <span class="post-date mb-4">Alexandr Chernyaev  •  October 17, 2020</span>
 
-                    <span class="post-date mb-2">October 17, 2020</span>
+                            <img src="/assets/img/crud-interface-for-your-eloquent-models/box.jpg" class="cover-image">
+            
+            <p>Recently, I had an interesting dialogue with my colleague Pavel. In which we discussed his new project.
+It was necessary to develop a service for a company engaged in the construction and supply of equipment. But the managers and owners weren't sure how far they wanted to go with this hiring him at an hourly rate.</p>
 
-                                            <img src="/assets/img/crud-interface-for-your-eloquent-models/box.jpg" class="cover-image">
-                    
-                    Recently, I had an interesting dialogue with my colleague Pavel. In which we discussed his new project.
-It was necessary to develop a service for a company engaged in the construction and supply of...
-                </div>
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/authenticate-with-jetstream">
-                            Authenticate with Jetstream
-                        </a>
-                    </h1>
+<p>Since he was a power user of Laravel Orchid, the whole panel was built on this package. In the end, he didn't have to create a complex system for tracking equipment shipments or purchases. It was just a very basic CRUD. All of its screens were almost the same, only fields and Eloquent models changed. In fact, he could have taken a backpack/nova/voyager or whatever to solve this problem.</p>
 
-                    <span class="post-date mb-2">October 16, 2020</span>
+<p>At that moment, we decided to try to write a package for CRUD based on Orchid. Surprisingly, this turned out to be easy since we already had different layers and many fields, and a filtering mechanism. In fact, we were able to use all of these things both in the platform package and for our new CRUD package while maintaining all the compatibility. That is, any fields/filters can be used both there and there.</p>
 
-                                            <img src="/assets/img/authenticate-with-jetstream/lock.jpg" class="cover-image">
-                    
-                    With the release of Laravel 8, the development team has released a new starter kit Jetstream. It is a replacement for the <code>laravel/ui</code> package. This is a significant change for which, in...
-                </div>
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/lasting-stack">
-                            What stack does Orchid use?
-                        </a>
-                    </h1>
+<p>The use process is not much different from nova/backpack/sleepingowl and others. But at the same time, I think it can be a great addition to our toolbox. Because when using alternative packages, you can achieve some maximum. After this, you will need to switch to stronger tools or even write everything yourself to fulfill the requirements.</p>
 
-                    <span class="post-date mb-2">October 12, 2020</span>
+<p><strong>It doesn't have to be that way now</strong>. You can take one Orchid and use it only as a CRUD, but as soon as you need to do a little more, change the writing style to Screens. <strong>At the same time, keeping your previous developments, as they are compatible</strong>.</p>
 
-                    
-                    There are a lot of different stacks in trend right now for building an application. Every year or two, a new product appears that causes a lot of hype on the net and people to rush to rewrite their...
-                </div>
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/what-are-a-screen-and-its-responsibility">
-                            What are a Screen and its responsibility?
-                        </a>
-                    </h1>
+<h3>What does it look like?</h3>
 
-                    <span class="post-date mb-2">October 11, 2020</span>
+<p>We chose to describe the entire CRUD scheme in one file called 'Resource', this is how it looks:</p>
 
-                                            <img src="/assets/img/what-are-a-screen-and-its-responsibility/diego-gonzalez--I8lDurtfAo-unsplash.jpg" class="cover-image">
-                    
-                    The screen is a rather unusual term for web developers. It means a unique set of components that a user can see on a page.
+<pre><code class="language-php">namespace App\Orchid\Resources;
 
-For example, when building a simple blog, we will have only two unique...
-                </div>
+use Orchid\Crud\Resource;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Quill;
+use Orchid\Screen\Fields\TextArea;
+use Orchid\Screen\TD;
+
+class Post extends Resource
+{
+    /**
+     * The model the resource corresponds to.
+     *
+     * @var string
+     */
+    public static $model = \App\Models\Post::class;
+
+    /**
+     * Get the fields displayed by the resource.
+     *
+     * @return array
+     */
+    public function fields(): array
+    {
+        return [
+            Input::make('title')
+                -&gt;title('Title')
+                -&gt;placeholder('Enter title here'),
+
+            TextArea::make('description')
+                -&gt;horizontal()
+                -&gt;title('Description')
+                -&gt;rows(3)
+                -&gt;maxlength(200)
+                -&gt;placeholder('Brief description for preview'),
+
+            Quill::make('body')
+                -&gt;horizontal()
+                -&gt;title('Main text'),
+        ];
+    }
+
+    /**
+     * Get the columns displayed by the resource.
+     *
+     * @return TD[]
+     */
+    public function columns(): array
+    {
+        return [
+            TD::set('id'),
+            TD::set('title'),
+            TD::set('description'),
+        ];
+    }
+
+    /**
+     * Get the validation rules that apply to save/update.
+     *
+     * @return array
+     */
+    public function rules(): array
+    {
+        return [
+            'title'       =&gt; 'string|required',
+            'description' =&gt; 'string|required',
+            'body'        =&gt; 'string|required',
+        ];
+    }
+}
+</code></pre>
+
+<p>When creating a resource, it is automatically registered in the menu and restricted in access permissions.</p>
+
+<h3>How can I get this?</h3>
+
+<p>Currently, the package does not yet have a stable version, but we plan to announce it next month. In the beginning, the package will not be open to everyone and distributed free of charge. Instead, we want to try the Sponsorware license. Only monthly subscribers to "Open Collective" will have access to the private git repository.</p>
+
+<p><a href="https://opencollective.com/orchid#backers" target="_blank"><img src="https://opencollective.com/orchid/backers.svg?width=838"></a></p>
+
+<p>As soon as you become a sponsor, we will send an invitation to the GitHub group to the specified mailing address within 24 hours. Now! Once we have recruited 15 monthly sponsors. The package will be open to everyone under the MIT license!</p>
+        </div>
+
+
+        <div class="pagination">
+                            <a href="https://blog.orchid.software/authenticate-with-jetstream" title="Older Post: Authenticate with Jetstream" class="pagination-item older">
+                    &LeftArrow; Authenticate with Jetstream
+                </a>
+            
+                            <span class="pagination-item newer">Newer</span>
                     </div>
-
-
-                    <div class="pagination">
-                
-                
-
-                                    <a
-                            href="/2"
-                            title="Next Page"
-                            class="pagination-item newer ml-auto"
-                    >&RightArrow;</a>
-                            </div>
-        
     </div>
-
-
-
 </div>
 
 
