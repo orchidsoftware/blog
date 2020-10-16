@@ -10,7 +10,7 @@
         <meta property="og:type" content="{{ $page->type ?? 'website' }}" />
         <meta property="og:url" content="{{ $page->getUrl() }}"/>
         <meta property="og:description" content="{{ $page->description ?? $page->siteDescription }}" />
-        <meta property="og:og:image" content="{{ $page->baseUrl }}{{ $page->cover_image ?? '/assets/img/preview.jpeg' }}" />
+        <meta property="og:image" content="{{ $page->baseUrl }}{{ $page->cover_image ?? '/assets/img/preview.jpeg' }}" />
 
 
         <title>{{ $page->title ?  $page->title . ' | ' : '' }}{{ $page->siteName }}</title>
