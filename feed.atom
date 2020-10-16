@@ -3,12 +3,151 @@
     <title>Laravel Orchid</title>
     <link href="https://blog.orchid.software/blog" />
     <link type="application/atom+xml" rel="self" href="https://blog.orchid.software/feed.atom" />
-    <updated>2020-10-13T11:09:59+00:00</updated>
+    <updated>2020-10-16T14:05:10+00:00</updated>
     <id>https://blog.orchid.software/feed.atom</id>
     <author>
         <name>Alexandr Chernyaev</name>
     </author>
                 <entry>
+            <id>https://blog.orchid.software/authenticate-with-jetstream</id>
+            <link type="text/html" rel="alternate" href="https://blog.orchid.software/authenticate-with-jetstream" />
+            <title>Authenticate with Jetstream</title>
+            <published>2020-10-16T00:00:00+00:00</published>
+            <updated>2020-10-16T00:00:00+00:00</updated>
+            <author>
+                <name>Alexandr Chernyaev</name>
+            </author>
+            <summary type="html">With the release of Laravel 8, the development team has released a new starter kit Jetstream. It is a replacement for the &lt;code&gt;laravel/ui&lt;/code&gt; package. This is a significant change for which, in fact, it was impossible to prepare in advance. New......</summary>
+            <content type="html"><![CDATA[
+                <p>With the release of Laravel 8, the development team has released a new starter kit <a href="https://github.com/laravel/jetstream">Jetstream</a>. It is a replacement for the <code>laravel/ui</code> package. This is a significant change for which, in fact, it was impossible to prepare in advance. New product releases are hidden and not shown until the release.</p>
+
+<p>Some of Orchid's features have started to compete with official packages like two-factor authentication. Therefore they were removed in the major release.
+It would be cool to parse how now you can entirely create your own authorization page, the two-factor authentication setup. Let's do it together now.</p>
+
+<p>First, we'll install the Laravel app:</p>
+
+<pre><code class="language-bash">composer create-project laravel/laravel orchid-project "8.*" --prefer-dist
+</code></pre>
+
+<p>Then we will install the Jetstream package using the Composer command:</p>
+
+<pre><code class="language-bash">composer require laravel/jetstream
+</code></pre>
+
+<p>Then we run the Artisan command:</p>
+
+<pre><code class="language-bash">php artisan jetstream:install livewire
+</code></pre>
+
+<p>This command will directly install the scaffolding on the Livewire stack.
+Upon completion of the installation, you will be asked to run:</p>
+
+<pre><code class="language-bash">npm install &amp;&amp; npm run dev
+</code></pre>
+
+<p>This is necessary to install and collect CSS/JS  resources.</p>
+
+<p>We now have login and edit pages. As well as profile pages, two-factor authentication settings, session viewing, etc.</p>
+
+<p>Now is the time to install Orchid:</p>
+
+<pre><code class="language-bash">composer require orchid/platform
+</code></pre>
+
+<p>Then also execute the Artisan command:</p>
+
+<pre><code class="language-php">php artisan orchid:install
+</code></pre>
+
+<p>Unfortunately, both packages' scaffolding overwrites the <code>app/Models/User</code> user model to add new features to the class. And we need to adjust it ourselves:</p>
+
+<pre><code class="language-php">namespace App\Models;
+
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Orchid\Platform\Models\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Jetstream\HasProfilePhoto;
+use Laravel\Sanctum\HasApiTokens;
+
+class User extends Authenticatable
+{
+    use HasApiTokens;
+    use HasFactory;
+    use HasProfilePhoto;
+    use Notifiable;
+    use TwoFactorAuthenticatable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'permissions',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'permissions',
+        'two_factor_recovery_codes',
+        'two_factor_secret',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'permissions'          =&gt; 'array',
+        'email_verified_at'    =&gt; 'datetime',
+    ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'profile_photo_url',
+    ];
+}
+</code></pre>
+
+<p>Both apps are working fine now. But we have two whole login pages. Since the Orchid login page is not expected to undergo any significant changes, let's disable it. To do this, change the setting in the configuration file located in <code>config/platform.php</code></p>
+
+<pre><code class="language-php"><br />/*
+|--------------------------------------------------------------------------
+| Auth Page
+|--------------------------------------------------------------------------
+|
+| The property controls the visibility of Orchid's built-in authentication pages.
+| You can disable this page and use your own set like 'Jetstream'
+|
+| You can learn more here: https://laravel.com/docs/authentication
+|
+*/
+
+'auth'  =&gt; false,
+</code></pre>
+
+<p>After that, when navigating to <code>/admin</code>, the Orchid login page will not be shown. Instead, the user will be redirected to the Jetstream page.</p>
+
+<p>That's all. In the same way, the algorithm will work if you enter any other package for scaffolding authorization. For example <code>laravel/ui</code> or <code>laravel/fortify</code>.</p>
+            ]]></content>
+        </entry>
+            <entry>
             <id>https://blog.orchid.software/lasting-stack</id>
             <link type="text/html" rel="alternate" href="https://blog.orchid.software/lasting-stack" />
             <title>What stack does Orchid use?</title>

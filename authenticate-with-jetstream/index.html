@@ -4,16 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="description" content="This is all that you see on the work area of an open web page.">
+        <meta name="description" content="Install Jetstream along with the Laravel Orchid Platform. Change the input and set up two-factor authentication.">
 
-        <meta property="og:title" content="What are a Screen and its responsibility? | Laravel Orchid"/>
+        <meta property="og:title" content="Authenticate with Jetstream | Laravel Orchid"/>
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://blog.orchid.software/what-are-a-screen-and-its-responsibility"/>
-        <meta property="og:description" content="This is all that you see on the work area of an open web page." />
-        <meta property="og:og:image" content="https://blog.orchid.software/assets/img/what-are-a-screen-and-its-responsibility/diego-gonzalez--I8lDurtfAo-unsplash.jpg" />
+        <meta property="og:url" content="https://blog.orchid.software/authenticate-with-jetstream"/>
+        <meta property="og:description" content="Install Jetstream along with the Laravel Orchid Platform. Change the input and set up two-factor authentication." />
+        <meta property="og:og:image" content="https://blog.orchid.software/assets/img/authenticate-with-jetstream/lock.jpg" />
 
 
-        <title>What are a Screen and its responsibility? | Laravel Orchid</title>
+        <title>Authenticate with Jetstream | Laravel Orchid</title>
 
         <link rel="home" href="https://blog.orchid.software">
         <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
@@ -109,135 +109,148 @@
     <div class="posts-container px-3 mx-auto my-5">
         <div class="post">
             <h1 class="post-title fw-500">
-                What are a Screen and its responsibility?
+                Authenticate with Jetstream
             </h1>
 
-            <span class="post-date mb-4">Alexandr Chernyaev  •  October 11, 2020</span>
+            <span class="post-date mb-4">Alexandr Chernyaev  •  October 16, 2020</span>
 
-                            <img src="/assets/img/what-are-a-screen-and-its-responsibility/diego-gonzalez--I8lDurtfAo-unsplash.jpg" class="cover-image">
+                            <img src="/assets/img/authenticate-with-jetstream/lock.jpg" class="cover-image">
             
-            <p>The screen is a rather unusual term for web developers. It means a unique set of components that a user can see on a page.</p>
+            <p>With the release of Laravel 8, the development team has released a new starter kit <a href="https://github.com/laravel/jetstream">Jetstream</a>. It is a replacement for the <code>laravel/ui</code> package. This is a significant change for which, in fact, it was impossible to prepare in advance. New product releases are hidden and not shown until the release.</p>
 
-<p>For example, when building a simple blog, we will have only two unique pages. Home and page to display text. In fact, we have just two screens. There can be as many pages in our blog as you want. But there are only two truly unique screens.</p>
+<p>Some of Orchid's features have started to compete with official packages like two-factor authentication. Therefore they were removed in the major release.
+It would be cool to parse how now you can entirely create your own authorization page, the two-factor authentication setup. Let's do it together now.</p>
 
-<p>Let's continue the blog analogy. Each of our pages has a header, menu, footer. And all changes to the input of the transfer and views take place in the workspace. In the Laravel Orchid admin panel, the <code>Screen</code> class is intended to control this workspace.</p>
+<p>First, we'll install the Laravel app:</p>
 
-<p>Now that we've clarified a bit what the screen is, we can go deeper. A good question may arise here: The workspace of an application usually contains a lot of logic, somewhere you need to take values from the database, somewhere to display them in a table. Is it possible to unite this? Don't get the noodle code?</p>
-
-<p>In fact, the responsibility is divided. Let's try to understand how popular single-page applications work. Some script accesses the service <code>API</code> for data and receives a <code>JSON</code> response where all the information is contained to display the content. Something like this:</p>
-
-<pre><code class="language-json">[
-  {
-    "id": 1,
-    "title": "sunt aut facere repellat provident occaecati...",
-    "body": "quia et suscipit suscipit recusandae ..."
-  },
-  {
-    "id": 2,
-    "title": "qui est esse",
-    "body": "est rerum tempore vitae sequi sin..."
-  },
-  {
-    "id": 3,
-    "title": "ea molestias quasi exercitationem repellat...",
-    "body": "et iusto sed quo iure voluptatem occaecati omnis..."
-  },
-  ...
+<pre><code class="language-bash">composer create-project laravel/laravel orchid-project "8.*" --prefer-dist
 </code></pre>
 
-<p>In fact, this <code>API</code> prepares all the necessary information that might be required to display a blog post. By the same endpoint principle, Orchid screens have a <code>query</code> method to prepare all the information.</p>
+<p>Then we will install the Jetstream package using the Composer command:</p>
 
-<pre><code class="language-php">/**
- * Query data
- *
- * @return array
- */
-public function query(): array
-{
-  return [
-    'posts' =&gt; [
-      new Repository([
-        "id"    =&gt; 1,
-        "title" =&gt; "sunt aut facere repellat provident occaecati...",
-        "body"  =&gt; "quia et suscipit suscipit recusandae ...",
-      ]),
-      new Repository([
-        "id"    =&gt; 2,
-        "title" =&gt; "qui est esse",
-        "body"  =&gt; "est rerum tempore vitae sequi sin...",
-      ]),
-      new Repository([
-        "id"    =&gt; 3,
-        "title" =&gt; "ea molestias quasi exercitationem repellat...",
-        "body"  =&gt; "et iusto sed quo iure voluptatem occaecati omnis...",
-      ]),
-    ]
-  ];
-}
+<pre><code class="language-bash">composer require laravel/jetstream
 </code></pre>
 
-<p>After receiving <code>JSON</code> in single-page apps start to render this,
-for example, using <code>front-end</code> frameworks, create some templates.</p>
+<p>Then we run the Artisan command:</p>
 
-<p>The same templates we have in Laravel Orchid screens expect you to pass them in the layouts method. For example, let's make a table (<code>php artisan orchid: table ExampleTable</code>):</p>
+<pre><code class="language-bash">php artisan jetstream:install livewire
+</code></pre>
 
-<pre><code class="language-php">use Orchid\Screen\TD;
-use Orchid\Screen\Layouts\Table;
+<p>This command will directly install the scaffolding on the Livewire stack.
+Upon completion of the installation, you will be asked to run:</p>
 
-class BlogListLayout extends Table
+<pre><code class="language-bash">npm install &amp;&amp; npm run dev
+</code></pre>
+
+<p>This is necessary to install and collect CSS/JS  resources.</p>
+
+<p>We now have login and edit pages. As well as profile pages, two-factor authentication settings, session viewing, etc.</p>
+
+<p>Now is the time to install Orchid:</p>
+
+<pre><code class="language-bash">composer require orchid/platform
+</code></pre>
+
+<p>Then also execute the Artisan command:</p>
+
+<pre><code class="language-php">php artisan orchid:install
+</code></pre>
+
+<p>Unfortunately, both packages' scaffolding overwrites the <code>app/Models/User</code> user model to add new features to the class. And we need to adjust it ourselves:</p>
+
+<pre><code class="language-php">namespace App\Models;
+
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Orchid\Platform\Models\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Jetstream\HasProfilePhoto;
+use Laravel\Sanctum\HasApiTokens;
+
+class User extends Authenticatable
 {
-  /**
-   * Data source.
-   *
-   * @var string
-   */
-  protected $target = 'posts';
+    use HasApiTokens;
+    use HasFactory;
+    use HasProfilePhoto;
+    use Notifiable;
+    use TwoFactorAuthenticatable;
 
-  /**
-   * @return TD[]
-   */
-  protected function columns() : array
-  {
-    return [
-        TD::set('id'),
-        TD::set('title'),
-        TD::set('body'),
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'permissions',
     ];
-  }
-}
-</code></pre>
 
-<p>In <code>target</code>, we indicated which prepared value (from <code>query</code>) needs to be passed to our template and declared the columns in our table.</p>
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'permissions',
+        'two_factor_recovery_codes',
+        'two_factor_secret',
+    ];
 
-<p>Now all that remains is to indicate the created template in the screen class:</p>
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'permissions'          =&gt; 'array',
+        'email_verified_at'    =&gt; 'datetime',
+    ];
 
-<pre><code class="language-php">/**
- * Views
- *
- * @return array
- */
-public function layout() : array
-{
-    return [
-        BlogListLayout::class
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'profile_photo_url',
     ];
 }
 </code></pre>
 
-<p>In fact, the screen united but did not take on unnecessary responsibility.
-If you follow which, you will not have code noodles. At the same time, just by looking at the screen code, you will already know what data and where it receives from and what templates will be displayed.</p>
+<p>Both apps are working fine now. But we have two whole login pages. Since the Orchid login page is not expected to undergo any significant changes, let's disable it. To do this, change the setting in the configuration file located in <code>config/platform.php</code></p>
+
+<pre><code class="language-php"><br />/*
+|--------------------------------------------------------------------------
+| Auth Page
+|--------------------------------------------------------------------------
+|
+| The property controls the visibility of Orchid's built-in authentication pages.
+| You can disable this page and use your own set like 'Jetstream'
+|
+| You can learn more here: https://laravel.com/docs/authentication
+|
+*/
+
+'auth'  =&gt; false,
+</code></pre>
+
+<p>After that, when navigating to <code>/admin</code>, the Orchid login page will not be shown. Instead, the user will be redirected to the Jetstream page.</p>
+
+<p>That's all. In the same way, the algorithm will work if you enter any other package for scaffolding authorization. For example <code>laravel/ui</code> or <code>laravel/fortify</code>.</p>
         </div>
 
 
         <div class="pagination">
-                            <a href="https://blog.orchid.software/svg-icons" title="Older Post: SVG Icons" class="pagination-item older">
-                    &LeftArrow; SVG Icons
+                            <a href="https://blog.orchid.software/lasting-stack" title="Older Post: What stack does Orchid use?" class="pagination-item older">
+                    &LeftArrow; What stack does Orchid use?
                 </a>
             
-                            <a href="https://blog.orchid.software/lasting-stack" title="Newer Post: What stack does Orchid use?"
-                   class="pagination-item newer">
-                    What stack does Orchid use? &RightArrow;
-                </a>
+                            <span class="pagination-item newer">Newer</span>
                     </div>
     </div>
 </div>
