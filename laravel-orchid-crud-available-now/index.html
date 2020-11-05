@@ -4,16 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="description" content="News and announcements for all things Laravel Orchid, including related projects.">
+        <meta name="description" content="We have created a new package aimed at developers who want to quickly create a user interface for eloquent models with functions such as creating, reading, updating, and deleting">
 
-        <meta property="og:title" content="Blog | Laravel Orchid"/>
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://blog.orchid.software/3"/>
-        <meta property="og:description" content="News and announcements for all things Laravel Orchid, including related projects." />
+        <meta property="og:title" content="Laravel Orchid CRUD Available Now | Laravel Orchid"/>
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://blog.orchid.software/laravel-orchid-crud-available-now"/>
+        <meta property="og:description" content="We have created a new package aimed at developers who want to quickly create a user interface for eloquent models with functions such as creating, reading, updating, and deleting" />
         <meta property="og:image" content="https://blog.orchid.software/assets/img/preview.jpeg" />
 
 
-        <title>Blog | Laravel Orchid</title>
+        <title>Laravel Orchid CRUD Available Now | Laravel Orchid</title>
 
         <link rel="home" href="https://blog.orchid.software">
         <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
@@ -106,55 +106,314 @@
 
 <div class="container">
     
+    <div class="posts-container px-3 mx-auto my-5">
+        <div class="post">
+            <h1 class="post-title fw-500">
+                Laravel Orchid CRUD Available Now
+            </h1>
 
-    <div class="posts-container mx-auto px-3 my-5">
-        <div class="posts">
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/dive-into-elements-and-forms">
-                            Dive into “Elements and Forms”
-                        </a>
-                    </h1>
+            <span class="post-date mb-4">Alexandr Chernyaev  •  November 5, 2020</span>
 
-                    <span class="post-date mb-2">September 15, 2019</span>
+            
+            <p>Last month, we announced a new package for developers looking to quickly create a user interface for eloquent models with features like create, read, update, and delete.</p>
 
-                    
-                    The use of automated “Laravel admin areas” can be summarized as “Forms over data” as the main tool is to provide a user interface for viewing, adding, and modifying data.
+<p>We now cover not only complex administration systems but also effective for home projects. So, you can create a simple application in no time with auto-generated CRUD views for each of your models for starters. But then you can go ahead and customize these views and forms as needed.</p>
 
-In this case, the...
-                </div>
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/comparison-of-administration-panels">
-                            Comparison of administration panels
-                        </a>
-                    </h1>
+<h2>How it works?</h2>
 
-                    <span class="post-date mb-2">March 3, 2019</span>
+<p>Laravel Orchid CRUD follows general industry guidelines <em>(Hi Nova, Backpack, SleepingOwl)</em>, where you describe the entire process in one file called a resource.</p>
 
-                    
-                    In 2017, Taylor Otwell published several articles, not comparing features or convenience, but the code results for various frameworks, where Laravel was the clear favorite.
+<iframe width="100%" height="400" src="https://www.youtube.com/embed/SukE7tNdU7A" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-Average class size...
-                </div>
+<h2>Defining Resources</h2>
+
+<p>Resources are stored in the <code>app/Orchid/Resources</code> directory of your application.
+You may generate a new resource using the <code>orchid:resource</code> Artisan command:</p>
+
+<pre><code class="language-bash">php artisan orchid:resource PostResource
+</code></pre>
+
+<p>The most basic and fundamental property of a resource is its <code>model</code> property. 
+This property tells the generator which Eloquent model the resource corresponds to:</p>
+
+<pre><code class="language-php">use App\Models\Post;
+
+/**
+ * The model the resource corresponds to.
+ *
+ * @var string
+ */
+public static $model = Post::class;
+</code></pre>
+
+<p>Freshly created resources contain nothing. Don't worry, we'll add more fields to our resource soon.</p>
+
+<h2>Expanding of Model</h2>
+
+<p>Many features of the Orchid platform relies on model customization. You can add or remove traits depending on your goals. But we will assume that you have set these for your model:</p>
+
+<pre><code class="language-php">use Illuminate\Database\Eloquent\Model;
+use Orchid\Attachment\Attachable;
+use Orchid\Filters\Filterable;
+use Orchid\Screen\AsSource;
+
+class Post extends Model
+{
+    use AsSource, Filterable, Attachable;
+}
+</code></pre>
+
+<h2>Registering Resources</h2>
+
+<p>By default, all resources within the <code>app/Orchid/Resources</code> directory will automatically be registered.
+You are not required to manually register them.</p>
+
+<h2>Permissions Resources</h2>
+
+<p>Each resource contains a <code>permission</code> method. Which should return the string key that the user needs to access this resource. By default, all resources are available to every user.</p>
+
+<pre><code class="language-php">/**
+ * Get the permission key for the resource.
+ *
+ * @return string|null
+ */
+public static function permission(): ?string
+{
+    return null;
+}
+</code></pre>
+
+<p>For each registered resource in which the method returns a non-null value, a new permission is created.</p>
+
+<pre><code class="language-php">/**
+ * Get the permission key for the resource.
+ *
+ * @return string|null
+ */
+public static function permission(): ?string
+{
+    return 'private-post-resource';
+}
+</code></pre>
+
+<p>It is necessary to give the right to manage it to the user.
+To click on the profile in the left column, go to the system page, and then to the page with users, 
+you can issue them a mandate or assign a role. After that, they will be displayed in the left menu.</p>
+
+<h2>Defining Fields</h2>
+
+<p>Each resource contains a <code>fields</code> method. This method returns an array of fields, which generally extend the <code>Orchid\Screen\Field</code> class. To add a field to a resource, we can add it to the resource's <code>fields</code> method. Typically, fields may be created using their static <code>make</code> method. This method accepts several arguments; however, you usually only need to pass the field's name.</p>
+
+<pre><code class="language-php">use Orchid\Screen\Fields\Input;
+
+/**
+ * Get the fields displayed by the resource.
+ *
+ * @return array
+ */
+public function fields(): array
+{
+    return [
+        Input::make('title')
+            -&gt;title('Title')
+            -&gt;placeholder('Enter title here'),
+    ];
+}
+</code></pre>
+
+<p>In the package to generate CRUD, you can use the fields Orchid platform. Review <a href="https://orchid.software/en/docs/field/">all available fields on the documentation site</a>.</p>
+
+<h2>Defining Сolumns</h2>
+
+<p>Each resource contains a <code>сolumns</code> method. To add a column to a resource, we can add it to the resource's <code>column</code> method. Typically, columns may be created using their static <code>make</code> method.</p>
+
+<pre><code class="language-php">use Orchid\Screen\TD;
+
+/**
+ * Get the columns displayed by the resource.
+ *
+ * @return TD[]
+ */
+public function columns(): array
+{
+    return [
+        TD::set('id'),
+        TD::set('title'),
+    ];
+}
+</code></pre>
+
+<p>The CRUD generation package is entirely based on the table layer. You can <a href="https://orchid.software/en/docs/layouts/table/">read more about this on the documentation page</a>.</p>
+
+<h2>Defining Rules</h2>
+
+<p>Each resource contains a <code>rules</code> method. When submitting a create or update form, the data can be validated, which is described in the <code>rules</code> method:</p>
+
+<pre><code class="language-php">/**
+ * Get the validation rules that apply to save/update.
+ *
+ * @return array
+ */
+public function rules(Post $model): array
+{
+    return [
+        'slug' =&gt; [
+            'required',
+            Rule::unique(Post::class, 'slug')-&gt;ignore($model),
+        ],
+    ];
+}
+</code></pre>
+
+<p>You can learn more on the Laravel <a href="https://laravel.com/docs/validation#available-validation-rules">validation page</a>.</p>
+
+<h2>Defining Filters</h2>
+
+<p>Each resource contains a <code>filters</code> method. Which expects you to return a list of class names that should be rendered and, if necessary, swapped out for the viewed model.</p>
+
+<pre><code class="language-php">/**
+ * Get the filters available for the resource.
+ *
+ * @return array
+ */
+public function filters(): array
+{
+    return [];
+}
+</code></pre>
+
+<p>To create a new filter, there is a command:</p>
+
+<pre><code class="language-bash">php artisan orchid:filter QueryFilter
+</code></pre>
+
+<p>This will create a class filter in the <code>app/Http/Filters</code> folder. To use filters in your own resource, you need:</p>
+
+<pre><code class="language-php">public function filters(): array
+{
+    return [
+        QueryFilter::class
+    ];
+}
+</code></pre>
+
+<p>You can learn more on the Orchid <a href="https://orchid.software/en/docs/filters/#eloquent-filter">filtration page</a>.</p>
+
+<h2>Eager Loading</h2>
+
+<p>Suppose you routinely need to access a resource's relationships within your fields. In that case, it may be a good idea to add the relationship to the <code>with</code> property of your resource. This property instructs to always eager to load the listed relationships when retrieving the resource.</p>
+
+<pre><code class="language-php"> /**
+ * Get relationships that should be eager loaded when performing an index query.
+ *
+ * @return array
+ */
+public function with(): array
+{
+    return ['user'];
+}
+</code></pre>
+
+<h2>Resource Events</h2>
+
+<p>Each resource has two methods that do the processing, <code>onSave</code> and <code>onDelete</code>. Each of them is launched when the event is executed, and you can change or supplement the logic:</p>
+
+<pre><code class="language-php">/**
+ * Action to create and update the model
+ *
+ * @param ResourceRequest $request
+ * @param Model           $model
+ */
+public function onSave(ResourceRequest $request, Model $model)
+{
+    $model-&gt;forceFill($request-&gt;all())-&gt;save();
+}
+
+/**
+ * Action to delete a model
+ *
+ * @param Model $model
+ *
+ * @throws Exception
+ */
+public function onDelete(Model $model)
+{
+    $model-&gt;delete();
+}
+</code></pre>
+
+<h2>Localization</h2>
+
+<p>Resource names may be localized by overriding the <code>label</code> and <code>singularLabel</code> methods on the resource class:</p>
+
+<pre><code class="language-php">/**
+ * Get the displayable label of the resource.
+ *
+ * @return string
+ */
+public static function label()
+{
+    return __('Posts');
+}
+
+/**
+ * Get the displayable singular label of the resource.
+ *
+ * @return string
+ */
+public static function singularLabel()
+{
+    return __('Post');
+}
+</code></pre>
+
+<p>Action buttons and notifications can also be translated, for example:</p>
+
+<pre><code class="language-php">/**
+ * Get the text for the create resource button.
+ *
+ * @return string|null
+ */
+public static function createButtonLabel(): string
+{
+    return __('Create :resource', ['resource' =&gt; static::singularLabel()]);
+}
+
+/**
+ * Get the text for the create resource toast.
+ *
+ * @return string
+ */
+public static function createToastMessage(): string
+{
+    return __('The :resource was created!', ['resource' =&gt; static::singularLabel()]);
+}
+</code></pre>
+
+<p>You can learn more on the <a href="https://laravel.com/docs/localization">Laravel localization page</a>.</p>
+
+<h2>What if I need more?</h2>
+
+<p>When you need more options, it's easy to switch to using the platform. All fields, filters, and characteristics are compatible.</p>
+
+<h2>How can I get this?</h2>
+
+<p>As stated earlier, we decided to try the Sponsorware license. Only monthly subscribers to "Open Collective" will have access to the private git repository.</p>
+
+<p><a href="https://opencollective.com/orchid#backers" target="_blank"><img src="https://opencollective.com/orchid/backers.svg?width=838"></a></p>
+
+<p>Once you become a sponsor, we will send an invite to the GitHub group to the email address provided within 24 hours. After 15 or more monthly sponsors, the package will be open to everyone under the MIT license!</p>
+        </div>
+
+
+        <div class="pagination">
+                            <a href="https://blog.orchid.software/crud-interface-for-your-eloquent-models" title="Older Post: CRUD interface for your Eloquent models" class="pagination-item older">
+                    &LeftArrow; CRUD interface for your Eloquent models
+                </a>
+            
+                            <span class="pagination-item newer">Newer</span>
                     </div>
-
-
-                    <div class="pagination">
-                                    <a
-                            href="/2"
-                            title="Previous Page"
-                            class="pagination-item older mr-auto"
-                    >&LeftArrow;</a>
-                
-                
-
-                            </div>
-        
     </div>
-
-
-
 </div>
 
 
