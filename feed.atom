@@ -3,7 +3,7 @@
     <title>Laravel Orchid</title>
     <link href="https://blog.orchid.software/blog" />
     <link type="application/atom+xml" rel="self" href="https://blog.orchid.software/feed.atom" />
-    <updated>2020-11-05T11:59:36+00:00</updated>
+    <updated>2020-11-15T20:49:22+00:00</updated>
     <id>https://blog.orchid.software/feed.atom</id>
     <author>
         <name>Alexandr Chernyaev</name>
@@ -21,7 +21,7 @@
             </author>
             <summary type="html">Last month, we announced a new package for developers looking to quickly create a user interface for eloquent models with features like create, read, update, and delete.
 
-We now cover not only complex administration systems but also effective for home......</summary>
+We now cover not only complex administration systems but also effective for home...</summary>
             <content type="html"><![CDATA[
                 <p>Last month, we announced a new package for developers looking to quickly create a user interface for eloquent models with features like create, read, update, and delete.</p>
 
@@ -325,7 +325,7 @@ public static function createToastMessage(): string
                 <name>Alexandr Chernyaev</name>
             </author>
             <summary type="html">Recently, I had an interesting dialogue with my colleague Pavel. In which we discussed his new project.
-It was necessary to develop a service for a company engaged in the construction and supply of equipment. But the managers and owners weren&#039;t sure how......</summary>
+It was necessary to develop a service for a company engaged in the construction and supply of equipment. But the managers and owners weren&#039;t sure how...</summary>
             <content type="html"><![CDATA[
                 <p>Recently, I had an interesting dialogue with my colleague Pavel. In which we discussed his new project.
 It was necessary to develop a service for a company engaged in the construction and supply of equipment. But the managers and owners weren't sure how far they wanted to go with this hiring him at an hourly rate.</p>
@@ -436,7 +436,7 @@ class Post extends Resource
             <author>
                 <name>Alexandr Chernyaev</name>
             </author>
-            <summary type="html">With the release of Laravel 8, the development team has released a new starter kit Jetstream. It is a replacement for the &lt;code&gt;laravel/ui&lt;/code&gt; package. This is a significant change for which, in fact, it was impossible to prepare in advance. New......</summary>
+            <summary type="html">With the release of Laravel 8, the development team has released a new starter kit Jetstream. It is a replacement for the &lt;code&gt;laravel/ui&lt;/code&gt; package. This is a significant change for which, in fact, it was impossible to prepare in advance. New...</summary>
             <content type="html"><![CDATA[
                 <p>With the release of Laravel 8, the development team has released a new starter kit <a href="https://github.com/laravel/jetstream">Jetstream</a>. It is a replacement for the <code>laravel/ui</code> package. This is a significant change for which, in fact, it was impossible to prepare in advance. New product releases are hidden and not shown until the release.</p>
 
@@ -579,7 +579,7 @@ class User extends Authenticatable
             </author>
             <summary type="html">There are a lot of different stacks in trend right now for building an application. Every year or two, a new product appears that causes a lot of hype on the net and people to rush to rewrite their projects.
 
-But the laravel Orchid administration panel......</summary>
+But the laravel Orchid administration panel...</summary>
             <content type="html"><![CDATA[
                 <p>There are a lot of different stacks in trend right now for building an application. Every year or two, a new product appears that causes a lot of hype on the net and people to rush to rewrite their projects.</p>
 
@@ -651,7 +651,7 @@ think that they may not exist for a year. This solves the same problems as befor
             </author>
             <summary type="html">The screen is a rather unusual term for web developers. It means a unique set of components that a user can see on a page.
 
-For example, when building a simple blog, we will have only two unique pages. Home and page to display text. In fact, we have just......</summary>
+For example, when building a simple blog, we will have only two unique pages. Home and page to display text. In fact, we have just...</summary>
             <content type="html"><![CDATA[
                 <p>The screen is a rather unusual term for web developers. It means a unique set of components that a user can see on a page.</p>
 
@@ -778,7 +778,7 @@ If you follow which, you will not have code noodles. At the same time, just by l
             </author>
             <summary type="html">In the latest release of the package, I replaced &lt;code&gt;Icon Fonts&lt;/code&gt; in favor of the SVG format, which means that now icons are available in a vector.
 
-Previously, if you needed to display your own (or from the Internet) icon, you could translate it......</summary>
+Previously, if you needed to display your own (or from the Internet) icon, you could translate it...</summary>
             <content type="html"><![CDATA[
                 <p>In the latest release of the package, I replaced <code>Icon Fonts</code> in favor of the SVG format, which means that now icons are available in a vector.</p>
 
@@ -827,7 +827,7 @@ To display in the components of the package, you only need to pass the prefix + 
             <summary type="html">Building charts can be awkward, but since &lt;code&gt;7.15.0&lt;/code&gt;, a trait has been added to Laravel Orchid to generate group and time data.
 To use it, you should add the trait &lt;code&gt;Orchid\Metrics\Chartable&lt;/code&gt; to the model.
 
-Let&#039;s try it in action and......</summary>
+Let&#039;s try it in action and...</summary>
             <content type="html"><![CDATA[
                 <p>Building charts can be awkward, but since <code>7.15.0</code>, a trait has been added to <a href="http://orchid.software/">Laravel Orchid</a> to generate group and time data.
 To use it, you should add the trait <code>Orchid\Metrics\Chartable</code> to the model.</p>
@@ -975,7 +975,7 @@ class UsageTwoFactorAuth extends Chart
             <author>
                 <name>Alexandr Chernyaev</name>
             </author>
-            <summary type="html">Layouts are easy to reuse when fields are related to the relations of different models. During installation, we have a layer for defining permissions, which is used immediately at the user and roles editing screen. But sometimes you want to apply the......</summary>
+            <summary type="html">Layouts are easy to reuse when fields are related to the relations of different models. During installation, we have a layer for defining permissions, which is used immediately at the user and roles editing screen. But sometimes you want to apply the...</summary>
             <content type="html"><![CDATA[
                 <p>Layouts are easy to reuse when fields are related to the relations of different models. During installation, we have a layer for defining permissions, which is used immediately at the user and roles editing screen. But sometimes you want to apply the same set of fields with different values. Let's consider an example when you need to specify an address.</p>
 
@@ -1132,7 +1132,7 @@ class AddressLayout extends Rows
             </author>
             <summary type="html">The use of automated “Laravel admin areas” can be summarized as “Forms over data” as the main tool is to provide a user interface for viewing, adding, and modifying data.
 
-In this case, the form can consist of many different fields for entering......</summary>
+In this case, the form can consist of many different fields for entering...</summary>
             <content type="html"><![CDATA[
                 <p>The use of automated “Laravel admin areas” can be summarized as “Forms over data” as the main tool is to provide a user interface for viewing, adding, and modifying data.</p>
 
@@ -1366,7 +1366,7 @@ protected $inlineAttributes = [
 Average class size comparison
 
 
-  Framework Average Class Size Comparison ... I......</summary>
+  Framework Average Class Size Comparison ... I...</summary>
             <content type="html"><![CDATA[
                 <p>In 2017, <a href="http://medium.com/@taylorotwell">Taylor Otwell</a> published several articles, not comparing features or convenience, but the code results for various frameworks, where Laravel was the clear favorite.</p>
 
