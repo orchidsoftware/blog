@@ -6,14 +6,14 @@
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="description" content="News and announcements for all things Laravel Orchid, including related projects.">
 
-        <meta property="og:title" content="Blog | Laravel Orchid"/>
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://blog.orchid.software/"/>
+        <meta property="og:title" content="Actions with a confirm dialog | Laravel Orchid"/>
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://blog.orchid.software/confirm-actions"/>
         <meta property="og:description" content="News and announcements for all things Laravel Orchid, including related projects." />
-        <meta property="og:image" content="https://blog.orchid.software/assets/img/preview.jpeg" />
+        <meta property="og:image" content="https://blog.orchid.software/assets/img/confirm-actions/confirm.png" />
 
 
-        <title>Blog | Laravel Orchid</title>
+        <title>Actions with a confirm dialog | Laravel Orchid</title>
 
         <link rel="home" href="https://blog.orchid.software">
         <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
@@ -106,81 +106,61 @@
 
 <div class="container">
     
+    <div class="posts-container px-3 mx-auto my-5">
+        <div class="post">
+            <h1 class="post-title fw-500">
+                Actions with a confirm dialog
+            </h1>
 
-    <div class="posts-container mx-auto px-3 my-5">
-        <div class="posts">
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/confirm-actions">
-                            Actions with a confirm dialog
-                        </a>
-                    </h1>
+            <span class="post-date mb-4">Alexandr Chernyaev  •  November 24, 2020</span>
 
-                    <span class="post-date mb-2">November 24, 2020</span>
+                            <img src="/assets/img/confirm-actions/confirm.png" class="cover-image">
+            
+            <p>Most web applications require the user to perform some action, such as saving or modifying data. It will be a shame if the action is performed by mistake. To avoid this, a confirmation dialog is a popular solution. In which the user is asked to confirm their actions before performing them.</p>
 
-                                            <img src="/assets/img/confirm-actions/confirm.png" class="cover-image">
-                    
-                    Most web applications require the user to perform some action, such as saving or modifying data. It will be a shame if the action is performed by mistake. To avoid this, a confirmation dialog is a...
-                </div>
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/laravel-orchid-crud-available-now">
-                            Laravel Orchid CRUD Available Now
-                        </a>
-                    </h1>
+<p>This article provides a brief introduction to confirmation dialog boxes for what they should and shouldn't contain, typical use cases.</p>
 
-                    <span class="post-date mb-2">November 5, 2020</span>
+<blockquote>
+  <p>Since version 9.10.0 confirmation window has been added to Laravel Orchid</p>
+</blockquote>
 
-                    
-                    Last month, we announced a new package for developers looking to quickly create a user interface for eloquent models with features like create, read, update, and delete.
+<p>Confirmation dialogs usually have the same three parts as most other dialogues:</p>
 
-We now cover not only...
-                </div>
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/crud-interface-for-your-eloquent-models">
-                            CRUD interface for your Eloquent models
-                        </a>
-                    </h1>
+<ul>
+<li>Headline - It could be a simple "Are you sure?" and most often a button to close the dialog.</li>
+<li>Content - the section describes the consequences of the action.</li>
+<li>The footer consists of two buttons: one to confirm and the other to cancel the operation.</li>
+</ul>
 
-                    <span class="post-date mb-2">October 17, 2020</span>
+<h2>Dialog example</h2>
 
-                                            <img src="/assets/img/crud-interface-for-your-eloquent-models/box.jpg" class="cover-image">
-                    
-                    Recently, I had an interesting dialogue with my colleague Pavel. In which we discussed his new project.
-It was necessary to develop a service for a company engaged in the construction and supply of...
-                </div>
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/authenticate-with-jetstream">
-                            Authenticate with Jetstream
-                        </a>
-                    </h1>
+<p>Each dialog, called using the <code>confirm</code> method of the <code>Button</code> class, will create a dialog box, as well as handle its behavior when the button is clicked.</p>
 
-                    <span class="post-date mb-2">October 16, 2020</span>
+<pre><code class="language-php">use Orchid\Screen\Actions\Button;
 
-                                            <img src="/assets/img/authenticate-with-jetstream/lock.jpg" class="cover-image">
-                    
-                    With the release of Laravel 8, the development team has released a new starter kit Jetstream. It is a replacement for the <code>laravel/ui</code> package. This is a significant change for which, in...
-                </div>
+Button::make('Remove')
+    -&gt;confirm('Description of the consequences of removal...')
+    -&gt;method('remove');
+</code></pre>
+
+<p>For different confirmation dialog boxes, only the description of the consequences of execution changes.</p>
+
+<blockquote>
+  <p><em>Caution.</em> The passed string will not be escaped</p>
+</blockquote>
+
+<p>It is safe to use such a call many times, for example in tables, since instead of creating many dialog boxes, the description value will be inserted into a prepared dialog.</p>
+        </div>
+
+
+        <div class="pagination">
+                            <a href="https://blog.orchid.software/laravel-orchid-crud-available-now" title="Older Post: Laravel Orchid CRUD Available Now" class="pagination-item older">
+                    &LeftArrow; Laravel Orchid CRUD Available Now
+                </a>
+            
+                            <span class="pagination-item newer">Newer</span>
                     </div>
-
-
-                    <div class="pagination">
-                
-                
-
-                                    <a
-                            href="/2"
-                            title="Next Page"
-                            class="pagination-item newer ml-auto"
-                    >&RightArrow;</a>
-                            </div>
-        
     </div>
-
-
-
 </div>
 
 

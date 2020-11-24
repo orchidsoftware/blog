@@ -3,12 +3,61 @@
     <title>Laravel Orchid</title>
     <link href="https://blog.orchid.software/blog" />
     <link type="application/atom+xml" rel="self" href="https://blog.orchid.software/feed.atom" />
-    <updated>2020-11-15T20:49:22+00:00</updated>
+    <updated>2020-11-24T14:55:09+00:00</updated>
     <id>https://blog.orchid.software/feed.atom</id>
     <author>
         <name>Alexandr Chernyaev</name>
     </author>
                 <entry>
+            <id>https://blog.orchid.software/confirm-actions</id>
+            <link type="text/html" rel="alternate" href="https://blog.orchid.software/confirm-actions" />
+            <title>Actions with a confirm dialog</title>
+            <published>2020-11-24T00:00:00+00:00</published>
+            <updated>2020-11-24T00:00:00+00:00</updated>
+            <logo>https://blog.orchid.software/assets/img/confirm-actions/confirm.png</logo>
+            <icon>https://blog.orchid.software/assets/img/confirm-actions/confirm.png</icon>
+            <author>
+                <name>Alexandr Chernyaev</name>
+            </author>
+            <summary type="html">Most web applications require the user to perform some action, such as saving or modifying data. It will be a shame if the action is performed by mistake. To avoid this, a confirmation dialog is a popular solution. In which the user is asked to confirm...</summary>
+            <content type="html"><![CDATA[
+                <p>Most web applications require the user to perform some action, such as saving or modifying data. It will be a shame if the action is performed by mistake. To avoid this, a confirmation dialog is a popular solution. In which the user is asked to confirm their actions before performing them.</p>
+
+<p>This article provides a brief introduction to confirmation dialog boxes for what they should and shouldn't contain, typical use cases.</p>
+
+<blockquote>
+  <p>Since version 9.10.0 confirmation window has been added to Laravel Orchid</p>
+</blockquote>
+
+<p>Confirmation dialogs usually have the same three parts as most other dialogues:</p>
+
+<ul>
+<li>Headline - It could be a simple "Are you sure?" and most often a button to close the dialog.</li>
+<li>Content - the section describes the consequences of the action.</li>
+<li>The footer consists of two buttons: one to confirm and the other to cancel the operation.</li>
+</ul>
+
+<h2>Dialog example</h2>
+
+<p>Each dialog, called using the <code>confirm</code> method of the <code>Button</code> class, will create a dialog box, as well as handle its behavior when the button is clicked.</p>
+
+<pre><code class="language-php">use Orchid\Screen\Actions\Button;
+
+Button::make('Remove')
+    -&gt;confirm('Description of the consequences of removal...')
+    -&gt;method('remove');
+</code></pre>
+
+<p>For different confirmation dialog boxes, only the description of the consequences of execution changes.</p>
+
+<blockquote>
+  <p><em>Caution.</em> The passed string will not be escaped</p>
+</blockquote>
+
+<p>It is safe to use such a call many times, for example in tables, since instead of creating many dialog boxes, the description value will be inserted into a prepared dialog.</p>
+            ]]></content>
+        </entry>
+            <entry>
             <id>https://blog.orchid.software/laravel-orchid-crud-available-now</id>
             <link type="text/html" rel="alternate" href="https://blog.orchid.software/laravel-orchid-crud-available-now" />
             <title>Laravel Orchid CRUD Available Now</title>
