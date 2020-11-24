@@ -3,7 +3,7 @@ extends: _layouts.post
 section: content
 title: Actions with a confirm dialog
 date: 2020-11-24
-description: 
+description: Learn how to use confirmation dialog in Laravel Orchid.
 cover_image: /assets/img/confirm-actions/confirm.png
 ---
 

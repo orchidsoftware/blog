@@ -4,6 +4,7 @@ section: content
 title: Laravel Orchid CRUD Available Now
 date: 2020-11-05
 description: We have created a new package aimed at developers who want to quickly create a user interface for eloquent models with functions such as creating, reading, updating, and deleting
+cover_image: /assets/img/laravel-orchid-crud-available-now/crud.jpg
 ---
 
 Last month, we announced a new package for developers looking to quickly create a user interface for eloquent models with features like create, read, update, and delete.
