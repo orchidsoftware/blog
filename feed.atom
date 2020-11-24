@@ -3,7 +3,7 @@
     <title>Laravel Orchid</title>
     <link href="https://blog.orchid.software/blog" />
     <link type="application/atom+xml" rel="self" href="https://blog.orchid.software/feed.atom" />
-    <updated>2020-11-24T14:55:09+00:00</updated>
+    <updated>2020-11-24T14:59:43+00:00</updated>
     <id>https://blog.orchid.software/feed.atom</id>
     <author>
         <name>Alexandr Chernyaev</name>
@@ -63,8 +63,8 @@ Button::make('Remove')
             <title>Laravel Orchid CRUD Available Now</title>
             <published>2020-11-05T00:00:00+00:00</published>
             <updated>2020-11-05T00:00:00+00:00</updated>
-            <logo>https://blog.orchid.software/assets/img/preview.jpeg</logo>
-            <icon>https://blog.orchid.software/assets/img/preview.jpeg</icon>
+            <logo>https://blog.orchid.software/assets/img/laravel-orchid-crud-available-now/crud.jpg</logo>
+            <icon>https://blog.orchid.software/assets/img/laravel-orchid-crud-available-now/crud.jpg</icon>
             <author>
                 <name>Alexandr Chernyaev</name>
             </author>
