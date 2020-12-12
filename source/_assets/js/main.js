@@ -8,8 +8,6 @@ import json from 'highlight.js/lib/languages/json';
 import markdown from 'highlight.js/lib/languages/markdown';
 import php from 'highlight.js/lib/languages/php';
 
-hljs.registerLanguage('javascript', javascript);
-
 // Syntax highlighting
 hljs.registerLanguage('bash', bash);
 hljs.registerLanguage('css', css);
