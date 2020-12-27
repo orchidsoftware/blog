@@ -146,4 +146,4 @@ Now, going to the user list page, we will also see the ratio of users who have e
 
 ![UsageTwoFactorAuth](/assets/img/draw-model-charts/t3alibhlbh3ggswv616r.png)
 
-That's it! Our minimum example is ready. You can learn more about building charts on the [documentation page](https://orchid.software/en/docs/layouts/charts).
+That's it! Our minimum example is ready. You can learn more about building charts on the [documentation page](https://orchid.software/en/docs/charts).
