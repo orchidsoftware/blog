@@ -3,7 +3,7 @@
     <title>Laravel Orchid</title>
     <link href="https://blog.orchid.software/blog" />
     <link type="application/atom+xml" rel="self" href="https://blog.orchid.software/feed.atom" />
-    <updated>2020-12-27T19:06:58+00:00</updated>
+    <updated>2020-12-27T23:15:52+00:00</updated>
     <id>https://blog.orchid.software/feed.atom</id>
     <author>
         <name>Alexandr Chernyaev</name>
@@ -1010,7 +1010,7 @@ class UsageTwoFactorAuth extends Chart
 
 <p><img src="/assets/img/draw-model-charts/t3alibhlbh3ggswv616r.png" alt="UsageTwoFactorAuth" /></p>
 
-<p>That's it! Our minimum example is ready. You can learn more about building charts on the <a href="https://orchid.software/en/docs/layouts/charts">documentation page</a>.</p>
+<p>That's it! Our minimum example is ready. You can learn more about building charts on the <a href="https://orchid.software/en/docs/charts">documentation page</a>.</p>
             ]]></content>
         </entry>
             <entry>
