@@ -6,7 +6,7 @@ return [
     'baseUrl' => 'http://localhost:3000',
     'production' => false,
     'siteName' => 'Laravel Orchid',
-    'siteDescription' => 'News and announcements for all things Laravel Orchid, including related projects.',
+    'siteDescription' => 'News and announcements around Laravel Orchid, including related projects.',
     'siteAuthor' => 'Alexandr Chernyaev',
 
     // collections
