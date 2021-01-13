@@ -4,16 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="description" content="New package to create CRUD based on Laravel Orchid">
+        <meta name="description" content="regergergre">
 
-        <meta property="og:title" content="CRUD interface for your Eloquent models | Laravel Orchid"/>
+        <meta property="og:title" content="How to write code: General Guidelines | Laravel Orchid"/>
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://blog.orchid.software/crud-interface-for-your-eloquent-models"/>
-        <meta property="og:description" content="New package to create CRUD based on Laravel Orchid" />
-        <meta property="og:image" content="https://blog.orchid.software/assets/img/crud-interface-for-your-eloquent-models/box.jpg" />
+        <meta property="og:url" content="https://blog.orchid.software/how-to-write-code"/>
+        <meta property="og:description" content="regergergre" />
+        <meta property="og:image" content="https://blog.orchid.software/assets/img/how-to-write-code/jordan-madrid-iDzKdNI7Qgc-unsplash.jpg" />
 
 
-        <title>CRUD interface for your Eloquent models | Laravel Orchid</title>
+        <title>How to write code: General Guidelines | Laravel Orchid</title>
 
         <link rel="home" href="https://blog.orchid.software">
         <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
@@ -109,121 +109,111 @@
     <div class="posts-container px-3 mx-auto my-5">
         <div class="post">
             <h1 class="post-title fw-500">
-                CRUD interface for your Eloquent models
+                How to write code: General Guidelines
             </h1>
 
-            <span class="post-date mb-4">Alexandr Chernyaev  •  October 17, 2020</span>
+            <span class="post-date mb-4">Alexandr Chernyaev  •  January 13, 2021</span>
 
-                            <img src="/assets/img/crud-interface-for-your-eloquent-models/box.jpg" class="cover-image">
+                            <img src="/assets/img/how-to-write-code/jordan-madrid-iDzKdNI7Qgc-unsplash.jpg" class="cover-image">
             
-            <p>Recently, I had an interesting dialogue with my colleague Pavel. In which we discussed his new project.
-It was necessary to develop a service for a company engaged in the construction and supply of equipment. But the managers and owners weren't sure how far they wanted to go with this hiring him at an hourly rate.</p>
+            <h2>Use services</h2>
 
-<p>Since he was a power user of Laravel Orchid, the whole panel was built on this package. In the end, he didn't have to create a complex system for tracking equipment shipments or purchases. It was just a very basic CRUD. All of its screens were almost the same, only fields and Eloquent models changed. In fact, he could have taken a backpack/nova/voyager or whatever to solve this problem.</p>
+<p>Almost every Orchid application implements specific business logic algorithms. And the best place for these algorithms is in services, into which you need to transfer business logic from all other classes - screen methods, application listeners, etc. This approach has certain advantages:</p>
 
-<p>At that moment, we decided to try to write a package for CRUD based on Orchid. Surprisingly, this turned out to be easy since we already had different layers and many fields, and a filtering mechanism. In fact, we were able to use all of these things both in the platform package and for our new CRUD package while maintaining all the compatibility. That is, any fields/filters can be used both there and there.</p>
+<ul>
+<li>There will be only one implementation of business logic that is in one place</li>
+<li>This business logic can be called from different places in the application and also published as a REST service.</li>
+</ul>
 
-<p>The use process is not much different from nova/backpack/sleepingowl and others. But at the same time, I think it can be a great addition to our toolbox. Because when using alternative packages, you can achieve some maximum. After this, you will need to switch to stronger tools or even write everything yourself to fulfill the requirements.</p>
+<p>Remember that business logic includes conditions, loops, etc. This means that service calls should ideally be single-line. Suppose we have code like this in a screen method:</p>
 
-<p><strong>It doesn't have to be that way now</strong>. You can take one Orchid and use it only as a CRUD, but as soon as you need to do a little more, change the writing style to Screens. <strong>At the same time, keeping your previous developments, as they are compatible</strong>.</p>
-
-<h3>What does it look like?</h3>
-
-<p>We chose to describe the entire CRUD scheme in one file called 'Resource', this is how it looks:</p>
-
-<pre><code class="language-php">namespace App\Orchid\Resources;
-
-use Orchid\Crud\Resource;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Quill;
-use Orchid\Screen\Fields\TextArea;
-use Orchid\Screen\TD;
-
-class Post extends Resource
-{
-    /**
-     * The model the resource corresponds to.
-     *
-     * @var string
-     */
-    public static $model = \App\Models\Post::class;
-
-    /**
-     * Get the fields displayed by the resource.
-     *
-     * @return array
-     */
-    public function fields(): array
-    {
-        return [
-            Input::make('title')
-                -&gt;title('Title')
-                -&gt;placeholder('Enter title here'),
-
-            TextArea::make('description')
-                -&gt;horizontal()
-                -&gt;title('Description')
-                -&gt;rows(3)
-                -&gt;maxlength(200)
-                -&gt;placeholder('Brief description for preview'),
-
-            Quill::make('body')
-                -&gt;horizontal()
-                -&gt;title('Main text'),
-        ];
-    }
-
-    /**
-     * Get the columns displayed by the resource.
-     *
-     * @return TD[]
-     */
-    public function columns(): array
-    {
-        return [
-            TD::set('id'),
-            TD::set('title'),
-            TD::set('description'),
-        ];
-    }
-
-    /**
-     * Get the validation rules that apply to save/update.
-     *
-     * @return array
-     */
-    public function rules(): array
-    {
-        return [
-            'title'       =&gt; 'string|required',
-            'description' =&gt; 'string|required',
-            'body'        =&gt; 'string|required',
-        ];
-    }
+<pre><code class="language-php">if ($item-&gt;isActive()) {
+  $service-&gt;doPlanA($item);
+} else {
+  $service-&gt;doPlanB($item);
 }
 </code></pre>
 
-<p>When creating a resource, it is automatically registered in the menu and restricted in access permissions.</p>
+<p>If you see this code, it might be worth moving it from the screen method to the "Service" as a separate <code>processItem(Item $item)</code> method since it looks like part of the business logic. After that, the code will look like this:</p>
 
-<h3>How can I get this?</h3>
+<pre><code class="language-php">$item = Item::find(1);
 
-<p>Currently, the package does not yet have a stable version, but we plan to announce it next month. In the beginning, the package will not be open to everyone and distributed free of charge. Instead, we want to try the Sponsorware license. Only monthly subscribers to "Open Collective" will have access to the private git repository.</p>
+$service-&gt;processItem($item);
+</code></pre>
 
-<p><a href="https://opencollective.com/orchid#backers" target="_blank"><img src="https://opencollective.com/orchid/backers.svg?width=838"></a></p>
+<p>And since different teams can develop screens and APIs, keeping the business logic in one place will help avoid inconsistent application behavior when going into production.</p>
 
-<p>As soon as you become a sponsor, we will send an invitation to the GitHub group to the specified mailing address within 24 hours. Now! Once we have recruited 15 monthly sponsors. The package will be open to everyone under the MIT license!</p>
+<h2>Use logging</h2>
+
+<p>Sometimes when an application is running in a production environment, something goes wrong. And when it does, it can be difficult to figure out what exactly caused the crash. You can't debug an application deployed to production, can you? Always use logging to make it easier for yourself, your fellow developers, and the support team and help you understand the problem and reproduce it.</p>
+
+<p>Logging can help in troubleshooting problems that do not arise in the application itself but in the services with which it is integrated. For example, to determine why a payment gateway is rejecting certain transactions, you might need to record all of the data and then use it when you contact support.</p>
+
+<p>Laravel already has good helpers for this, for example:</p>
+
+<pre><code class="language-php">use Illuminate\Support\Facades\Log;
+
+Log::emergency($message);
+Log::alert($message);
+Log::critical($message);
+Log::error($message);
+Log::warning($message);
+Log::notice($message);
+Log::info($message);
+Log::debug($message);
+</code></pre>
+
+<p>Remember that the logs' messages must be meaningful and contain enough information to understand what happened in the application.</p>
+
+<h2>Handle exceptions</h2>
+
+<p>Software exceptions are significant because they carry valuable information when something goes wrong in an application as intended. Therefore, the rule should not be ignored.</p>
+
+<p>For example, never do this:</p>
+
+<pre><code class="language-php">try {
+    $service-&gt;doPlanA($item); 
+} catch (Exception $exception) {
+
+}
+</code></pre>
+
+<p>If an error appears, no one will know about it.</p>
+
+<p>It's a little better, but far from ideal.</p>
+
+<pre><code class="language-php">try {
+    $service-&gt;doPlanA($item);  
+} catch (ServiceException $exception) {
+    Log::error($exception-&gt;getMessage());
+}
+</code></pre>
+
+<p>An error message will appear in the logs, and we will only receive certain classes of exceptions. But there will be no information about the context: the name of the object, from which user it originated. Moreover, there will be no stack trace, so it will not be easy to find where the exception was thrown. And one more thing - the user will not be notified of the problem.</p>
+
+<p>This can be considered a relatively good approach.</p>
+
+<pre><code class="language-php">try {
+   $service-&gt;doPlanA($item);  
+} catch (ServiceException $exception) {
+    throw new RuntimeException("Error service for process plan A");
+}
+</code></pre>
+
+<p>We know the error, don't lose the original exception, add an informative message. The caller will be notified of the exception. The current username and more context data could be added.</p>
+
+<h2>Conclusion</h2>
+
+<p>Orchid simplifies development, so you will surely finish your project earlier than expected. But following these simple rules of worries will become even less.</p>
         </div>
 
 
         <div class="pagination">
-                            <a href="https://blog.orchid.software/authenticate-with-jetstream" title="Older Post: Authenticate with Jetstream" class="pagination-item older">
-                    &LeftArrow; Authenticate with Jetstream
+                            <a href="https://blog.orchid.software/confirm-actions" title="Older Post: Actions with a confirm dialog" class="pagination-item older">
+                    &LeftArrow; Actions with a confirm dialog
                 </a>
             
-                            <a href="https://blog.orchid.software/laravel-orchid-crud-available-now" title="Newer Post: Laravel Orchid CRUD Available Now"
-                   class="pagination-item newer">
-                    Laravel Orchid CRUD Available Now &RightArrow;
-                </a>
+                            <span class="pagination-item newer">Newer</span>
                     </div>
     </div>
 </div>
