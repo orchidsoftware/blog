@@ -16,11 +16,14 @@ mix.js('source/_assets/js/main.js', 'js')
     .sourceMaps()
     .version();
 
-
+/*
 if (mix.inProduction()) {
+
     mix.purgeCss({
         extensions: ['html', 'md', 'js', 'php', 'vue'],
         folders: ['source'],
-        //whitelistPatterns: [/hljs*/],
+        //whitelistPatterns: [/hljs/],
     })
 }
+
+ */
