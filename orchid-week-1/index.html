@@ -6,14 +6,14 @@
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="description" content="News and announcements around Laravel Orchid, including related projects.">
 
-        <meta property="og:title" content="Blog | Laravel Orchid"/>
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://blog.orchid.software/3"/>
+        <meta property="og:title" content="Orchid Annotated week 2021-01-18 | Laravel Orchid"/>
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://blog.orchid.software/orchid-week-1"/>
         <meta property="og:description" content="News and announcements around Laravel Orchid, including related projects." />
-        <meta property="og:image" content="https://blog.orchid.software/assets/img/preview.jpeg" />
+        <meta property="og:image" content="https://blog.orchid.software/assets/img/orchid-week-1/pexels-olya-kobruseva-5417678.jpg" />
 
 
-        <title>Blog | Laravel Orchid</title>
+        <title>Orchid Annotated week 2021-01-18 | Laravel Orchid</title>
 
         <link rel="home" href="https://blog.orchid.software">
         <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
@@ -106,87 +106,72 @@
 
 <div class="container">
     
+    <div class="posts-container px-3 mx-auto my-5">
+        <div class="post">
+            <h1 class="post-title fw-500">
+                Orchid Annotated week 2021-01-18
+            </h1>
 
-    <div class="posts-container mx-auto px-3 my-5">
-        <div class="posts">
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/svg-icons">
-                            SVG Icons
-                        </a>
-                    </h1>
+            <span class="post-date mb-4">Alexandr Chernyaev  •  January 18, 2021</span>
 
-                    <span class="post-date mb-2">September 19, 2020</span>
+                            <img src="/assets/img/orchid-week-1/pexels-olya-kobruseva-5417678.jpg" class="cover-image">
+            
+            <p>This week, 3 authors have sent 15 commits to mastering and released 4 releases. Here's what we worked on:</p>
 
-                                            <img src="/assets/img/svg-icons/cc6rghokf83xr80dh899.png" class="cover-image">
-                    
-                    In the latest release of the package, I replaced <code>Icon Fonts</code> in favor of the SVG format, which means that now icons are available in a vector.
+<!-- more -->
 
-Previously, if you needed to display your...
-                </div>
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/draw-model-charts">
-                            Draw model charts
-                        </a>
-                    </h1>
+<h2>Orchid Platform</h2>
 
-                    <span class="post-date mb-2">August 5, 2020</span>
+<h3>Added</h3>
 
-                                            <img src="/assets/img/draw-model-charts/x4w1qcdys4p2qtu9ect8.png" class="cover-image">
-                    
-                    Building charts can be awkward, but since <code>7.15.0</code>, a trait has been added to Laravel Orchid to generate group and time data.
-To use it, you should add the trait...
-                </div>
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/reusing-layers">
-                            Reusing layers
-                        </a>
-                    </h1>
+<ul>
+<li>Support annotations for Charts <a href="https://github.com/orchidsoftware/platform/pull/1526">#1526</a></li>
+<li>Simplified Chinese translation <a href="https://github.com/orchidsoftware/platform/pull/1516">#1516</a></li>
+<li>Method for display the day of the week in charts</li>
+<li>Method for using the component in TD <a href="https://github.com/orchidsoftware/platform/issues/1489">#1489</a></li>
+<li>Missing Spanish translation <a href="https://github.com/orchidsoftware/platform/pull/1495">#1495</a></li>
+</ul>
 
-                    <span class="post-date mb-2">July 1, 2020</span>
+<h3>Fixed</h3>
 
-                    
-                    Layouts are easy to reuse when fields are related to the relations of different models. During installation, we have a layer for defining permissions, which is used immediately at the user and roles...
-                </div>
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/dive-into-elements-and-forms">
-                            Dive into “Elements and Forms”
-                        </a>
-                    </h1>
+<ul>
+<li>Table error when pagination is missing</li>
+<li>Used actual methods instead of outdated</li>
+<li>Clarification that could confuse new users <a href="https://github.com/orchidsoftware/orchid.software/issues/86">#86</a></li>
+<li>Corrected/Optimized German translation <a href="https://github.com/orchidsoftware/platform/pull/1496">#1496</a></li>
+</ul>
 
-                    <span class="post-date mb-2">September 15, 2019</span>
+<h2>Orchid CRUD</h2>
 
-                    
-                    The use of automated “Laravel admin areas” can be summarized as “Forms over data” as the main tool is to provide a user interface for viewing, adding, and modifying data.
+<h3>Added</h3>
 
-In this case, the...
-                </div>
+<ul>
+<li>Breadcrumbs for resources</li>
+<li>Description for resources <a href="https://github.com/orchidsoftware/crud/issues/21">#21</a></li>
+<li>Method for hidden resource in navigation <a href="https://github.com/orchidsoftware/crud/pull/16">#16</a></li>
+<li>Setting up pagination for a resource <a href="https://github.com/orchidsoftware/crud/pull/11">#11</a></li>
+</ul>
+
+<h3>Fixed</h3>
+
+<ul>
+<li>Highlighting the active element when creating and editing</li>
+<li>It is not possible to use Group in a resource <a href="https://github.com/orchidsoftware/crud/issues/15">#15</a></li>
+<li>Issue with <code>_retrieved_at</code> on resource edit <a href="https://github.com/orchidsoftware/crud/issues/13">#13</a></li>
+</ul>
+
+<p>You can also subscribe to receive new release emails directly on <a href="https://github.com/orchidsoftware">GitHub</a>.</p>
+        </div>
+
+
+        <div class="pagination">
+                            <a href="https://blog.orchid.software/how-to-write-code" title="Older Post: How to write code: General Guidelines" class="pagination-item older">
+                    &LeftArrow; How to write code: General Guidelines
+                </a>
+            
+                            <span class="pagination-item newer">Newer</span>
                     </div>
-
-
-                    <div class="pagination">
-                                    <a
-                            href="/2"
-                            title="Previous Page"
-                            class="pagination-item older mr-auto"
-                    >&LeftArrow;</a>
-                
-                
-
-                                    <a
-                            href="/4"
-                            title="Next Page"
-                            class="pagination-item newer ml-auto"
-                    >&RightArrow;</a>
-                            </div>
-        
     </div>
-
-
-
 </div>
 
 
