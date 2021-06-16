@@ -3,12 +3,40 @@
     <title>Laravel Orchid</title>
     <link href="https://blog.orchid.software/blog" />
     <link type="application/atom+xml" rel="self" href="https://blog.orchid.software/feed.atom" />
-    <updated>2021-01-18T16:21:20+00:00</updated>
+    <updated>2021-06-16T11:36:11+00:00</updated>
     <id>https://blog.orchid.software/feed.atom</id>
     <author>
         <name>Alexandr Chernyaev</name>
     </author>
                 <entry>
+            <id>https://blog.orchid.software/video-tutorials-for-beginners</id>
+            <link type="text/html" rel="alternate" href="https://blog.orchid.software/video-tutorials-for-beginners" />
+            <title>Video tutorials for beginners</title>
+            <published>2021-06-16T00:00:00+00:00</published>
+            <updated>2021-06-16T00:00:00+00:00</updated>
+            <logo>https://blog.orchid.software/assets/img/video-tutorials-for-beginners/img.png</logo>
+            <icon>https://blog.orchid.software/assets/img/video-tutorials-for-beginners/img.png</icon>
+            <author>
+                <name>Alexandr Chernyaev</name>
+            </author>
+            <summary type="html">A regular member of our community has made a cool series of video tutorials for newcomers to Orchid. Where, without unnecessary idle talk, he will show the main features, as well as analyze the nuances.
+
+Each video is absolutely free and is located on...</summary>
+            <content type="html"><![CDATA[
+                <p>A regular member of our community has made a cool series of video tutorials for newcomers to Orchid. Where, without unnecessary idle talk, he will show the main features, as well as analyze the nuances.</p>
+
+<p>Each video is absolutely free and is located on <a href="https://www.youtube.com/playlist?list=PLM-y77GFP_D0ZtrNGXorSjlcO8KsFrcgJ">YouTube</a>:</p>
+
+<iframe width="100%" height="400" src="https://www.youtube.com/embed/za1VYGG1BOg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<p>You can watch the entire series of video tutorials at the following link: <a href="https://www.youtube.com/playlist?list=PLM-y77GFP_D0ZtrNGXorSjlcO8KsFrcgJ">https://www.youtube.com/playlist?list=PLM-y77GFP_D0ZtrNGXorSjlcO8KsFrcgJ</a>.</p>
+
+<p>We've also prepared some wallpapers for your desktop that you can download directly from <a href="https://github.com/orchidsoftware/art/">GitHub</a>.</p>
+
+<p>Have a nice day!</p>
+            ]]></content>
+        </entry>
+            <entry>
             <id>https://blog.orchid.software/orchid-week-1</id>
             <link type="text/html" rel="alternate" href="https://blog.orchid.software/orchid-week-1" />
             <title>Orchid Annotated week 2021-01-18</title>
