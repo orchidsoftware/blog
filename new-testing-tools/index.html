@@ -4,16 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="description" content="News and announcements around Laravel Orchid, including related projects.">
+        <meta name="description" content="Orchid screen testing">
 
-        <meta property="og:title" content="Blog | Laravel Orchid"/>
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://blog.orchid.software/4"/>
-        <meta property="og:description" content="News and announcements around Laravel Orchid, including related projects." />
-        <meta property="og:image" content="https://blog.orchid.software/assets/img/preview.jpeg" />
+        <meta property="og:title" content="New testing tools | Laravel Orchid"/>
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://blog.orchid.software/new-testing-tools"/>
+        <meta property="og:description" content="Orchid screen testing" />
+        <meta property="og:image" content="https://blog.orchid.software/assets/img/new-testing-tools/cover.png" />
 
 
-        <title>Blog | Laravel Orchid</title>
+        <title>New testing tools | Laravel Orchid</title>
 
         <link rel="home" href="https://blog.orchid.software">
         <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
@@ -106,67 +106,79 @@
 
 <div class="container">
     
+    <div class="posts-container px-3 mx-auto my-5">
+        <div class="post">
+            <h1 class="post-title fw-500">
+                New testing tools
+            </h1>
 
-    <div class="posts-container mx-auto px-3 my-5">
-        <div class="posts">
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/reusing-layers">
-                            Reusing layers
-                        </a>
-                    </h1>
+            <span class="post-date mb-4">Alexandr Chernyaev  •  December 4, 2021</span>
 
-                    <span class="post-date mb-2">July 1, 2020</span>
+                            <img src="/assets/img/new-testing-tools/cover.png" class="cover-image">
+            
+            <p>Nowadays, the development of high-quality software is intertwined with automated testing. Therefore, the package contains testing tools to help you make it easy.</p>
 
-                    
-                    Layouts are easy to reuse when fields are related to the relations of different models. During installation, we have a layer for defining permissions, which is used immediately at the user and roles...
-                </div>
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/dive-into-elements-and-forms">
-                            Dive into “Elements and Forms”
-                        </a>
-                    </h1>
+<p>To use them, it is enough to add the <code>ScreenTesting</code> trait to your testing class, for example:</p>
 
-                    <span class="post-date mb-2">September 15, 2019</span>
+<pre><code class="language-php">namespace Tests\Feature;
 
-                    
-                    The use of automated “Laravel admin areas” can be summarized as “Forms over data” as the main tool is to provide a user interface for viewing, adding, and modifying data.
+use Orchid\Support\Testing\ScreenTesting;
+use Tests\TestCase;
 
-In this case, the...
-                </div>
-                            <div class="post">
-                    <h1 class="post-title fw-500">
-                        <a href="https://blog.orchid.software/comparison-of-administration-panels">
-                            Comparison of administration panels
-                        </a>
-                    </h1>
+class ExampleTest extends TestCase
+{
+    use ScreenTesting;
+    //...
+}
+</code></pre>
 
-                    <span class="post-date mb-2">March 3, 2019</span>
+<p>After that, a new method for obtaining screen data by route name will be available:</p>
 
-                    
-                    In 2017, Taylor Otwell published several articles, not comparing features or convenience, but the code results for various frameworks, where Laravel was the clear favorite.
+<pre><code class="language-php">public function testExampleScreen()
+{
+    $screen = $this-&gt;screen('platform.example');
 
-Average class size...
-                </div>
+    $screen-&gt;display()
+        -&gt;assertSee('Example screen');
+
+    $screen
+        -&gt;method('showToast')
+        -&gt;assertSee('Hello, world! This is a toast message.');
+
+    $screen
+        -&gt;method('showToast', [
+            'toast' =&gt; 'Custom message'
+        ])
+        -&gt;assertSee('Custom message');
+}
+</code></pre>
+
+<p>In many cases, routes take parameters, for example <code>users/{user}/edit</code>, in order to transfer them, you can use the method:</p>
+
+<pre><code class="language-php">$screen = $this-&gt;screen('platform.systems.users.edit')
+    -&gt;parameters([
+        'user' =&gt; 1,
+    ]);
+</code></pre>
+
+<p>Most likely, your routes are closed from guests and are available only for users. You need to call the <code>actingAs</code> method passing the user to log in.</p>
+
+<pre><code class="language-php">// Create a single App\Models\User instance...
+$user = User::factory()-&gt;create();
+
+$screen = $this-&gt;screen('platform.example')-&gt;actingAs($user);
+</code></pre>
+        </div>
+
+
+        <div class="pagination">
+                            <a href="https://blog.orchid.software/video-tutorials-for-beginners" title="Older Post: Video tutorials for beginners" class="pagination-item older">
+                    &LeftArrow; Video tutorials for beginners
+                </a>
+            
+                            <span class="pagination-item newer">Newer</span>
                     </div>
-
-
-                    <div class="pagination">
-                                    <a
-                            href="/3"
-                            title="Previous Page"
-                            class="pagination-item older mr-auto"
-                    >&LeftArrow;</a>
-                
-                
-
-                            </div>
-        
     </div>
-
-
-
 </div>
 
 
